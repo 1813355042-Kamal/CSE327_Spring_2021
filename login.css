@@ -34,7 +34,7 @@ body
     outline: none;
 }
 button{
-    color: #fff;
+    color: rgb(255, 255, 255);
     width: 100%;
     padding: 10px;
     border-radius: 20px;
