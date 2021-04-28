@@ -21,17 +21,73 @@
   </head>
   <body>
 
-          <!-- This is the map part-->
-          <div id="map"></div>
-              <script>
-                  mapboxgl.accessToken = 'pk.eyJ1IjoidGhlc2FsbWFuc2FoZWwiLCJhIjoiY2toNHVqNjd4MGZmcDJ4b3Zzdm02bzJlcyJ9.TqZwgHJ7WGvn876yNRN_4w';
-                  var map = new mapboxgl.Map({
-                      container: 'map', // container ID
-                      style: 'mapbox://styles/mapbox/streets-v11', // style URL
-                      center: [90.41, 23.78], // starting position [lng, lat]
-                      zoom: 12 // starting zoom
-                  });
-              </script>
+            <!-- This is the map part-->
+            <div id="map">
+            </div>
+            <div id="clickmarker"></div>
+
+            <script>
+                mapboxgl.accessToken = 'pk.eyJ1IjoidGhlc2FsbWFuc2FoZWwiLCJhIjoiY2toNHVqNjd4MGZmcDJ4b3Zzdm02bzJlcyJ9.TqZwgHJ7WGvn876yNRN_4w';
+                var map = new mapboxgl.Map({
+                    container: 'map', // container ID
+                    style: 'mapbox://styles/mapbox/streets-v11', // style URL
+                    center: [90.41, 23.78], // starting position [lng, lat]
+                    zoom: 12 // starting zoom
+                });
+
+                var placedmarker = false;
+                var Cursor;
+                // GeoJSON object to hold our measurement features
+                var geojson = {
+                    'type': 'FeatureCollection',
+                    'features': []
+                };
+
+                map.on('load', function () {
+                    map.addSource('geojson', {
+                        'type': 'geojson',
+                        'data': geojson
+                    });
+
+                    // Add styles to the map
+                    map.addLayer({
+                        id: 'cursor-layer',
+                        type: 'circle',
+                        source: 'geojson',
+                        paint: {
+                            'circle-radius': 5,
+                            'circle-color': '#E00'
+                        },
+                        filter: ['in', '$type', 'Point']
+                    });
+
+
+                    map.on('click', function (e) {
+                        var features = map.queryRenderedFeatures(e.point);
+                        if(placedmarker){
+                        	geojson.features=[];
+                            placedmarker=false;
+                        }
+                        else{
+                        	placedmarker= true;
+                            var point = {
+                                'type': 'Feature',
+                                'geometry': {
+                                    'type': 'Point',
+                                    'coordinates': [e.lngLat.lng, e.lngLat.lat]
+                                },
+                                'properties': {
+                                    'id': 'cursor'
+                                }
+                            };
+                            Cursor = point.coordinates;
+                            geojson.features.push(point);
+                        }
+                        map.getSource('geojson').setData(geojson);
+                    });
+                });
+
+            </script>
 
           <!--Start of Nav Bar-->
           <nav class="navbar navbar-expand-sm navbar-dark bg-black">
