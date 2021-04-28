@@ -16,13 +16,12 @@
   const auth = firebase.auth();
   firebase.analytics();
 
-  function Login(){
+  function LoginData(){
       var firstname = document.getElementById("firstname");
       var lastname = document.getElementById("lastname");
       var email = document.getElementById("email");
       var phonenumber = document.getElementById("phonenumber");
       var password = document.getElementById("password");
-      var confirmpassword = document.getElementById("confirmpassword");
       var address = document.getElementById("address");
       const promise = auth.createUserWithInfo(email.value, password.value);
       promise.catch(e => alert (e.message));
