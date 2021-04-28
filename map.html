@@ -7,7 +7,10 @@
 
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="main.css">
+    <link rel="stylesheet" href="float.css">
+
     <script src="https://kit.fontawesome.com/7bf1794c28.js" crossorigin="anonymous"></script>
     <link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet">
     <!-- Mapbox Scripts-->
@@ -20,11 +23,17 @@
     </style>
   </head>
   <body>
+            <script>
+                var placedmarker = false;
+                var Cursor;
+                var CursorLat;
+                var CursorLng;
+            </script>
 
-            <!-- This is the map part-->
-            <div id="map">
-            </div>
-            <div id="clickmarker"></div>
+                <div id="map"></div>
+                <div id="clickmarker"></div>
+                <a href="#" class="float" onclick="triggerRegisterNewHousePopup()"> <i class="fa fa-home my-float"></i> </a>
+                <div class="label-container"> <div class="label-text">Register New House</div> <i class="fa fa-play label-arrow"></i> </div>
 
             <script>
                 mapboxgl.accessToken = 'pk.eyJ1IjoidGhlc2FsbWFuc2FoZWwiLCJhIjoiY2toNHVqNjd4MGZmcDJ4b3Zzdm02bzJlcyJ9.TqZwgHJ7WGvn876yNRN_4w';
@@ -35,8 +44,6 @@
                     zoom: 12 // starting zoom
                 });
 
-                var placedmarker = false;
-                var Cursor;
                 // GeoJSON object to hold our measurement features
                 var geojson = {
                     'type': 'FeatureCollection',
@@ -80,7 +87,8 @@
                                     'id': 'cursor'
                                 }
                             };
-                            Cursor = point.coordinates;
+                            CursorLat=e.lngLat.lat;
+                            CursorLng=e.lngLat.lng;
                             geojson.features.push(point);
                         }
                         map.getSource('geojson').setData(geojson);
@@ -116,6 +124,35 @@
             </div>
           </div>
           </nav>
+
+          <div class="popup" id="registerhousepopup">
+              <div class="popup-content">
+                  <p class="lead">Register new house</p>
+                  <input type="text" placeholder= "Rent"></input>
+                  <input type="text" placeholder= "Number of Bedrooms"></input>
+                  <input type="text" placeholder= "Number of Bathrooms"></input>
+                  <a href="#" class="btn btn-register" onclick="registerNewHouse()">
+                     Register
+                  </a>
+                  <a href="#" class="btn btn-exit" onclick = "closeRegisterNewHousePopup()">
+                     Exit
+                  </a>
+              </div>
+          </div>
+
+          <script>
+                //This handles the house registration system.
+                function registerNewHouse(){
+                    window.alert(CursorLat + " "+ CursorLng);
+                }
+                function triggerRegisterNewHousePopup(){
+                    document.getElementById("registerhousepopup").style.display = "flex";
+                }
+                function closeRegisterNewHousePopup(){
+                    document.getElementById("registerhousepopup").style.display = "none";
+                }
+          </script>
+
 
   </body>
 

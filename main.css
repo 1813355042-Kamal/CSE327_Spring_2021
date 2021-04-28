@@ -44,6 +44,7 @@ body{
 .btn-color:hover{
     color: rgb(255, 255, 255);
 }
+
 @keyframes slide-btn{
     16%{
         transform: translateY(8px);
@@ -187,6 +188,3 @@ body{
     margin-bottom: 35px;
 }
 /*end of page*/
-
-
-
