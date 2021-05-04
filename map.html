@@ -141,38 +141,9 @@
           </div>
 
           <script>
-<<<<<<< Updated upstream
                 //This handles the house registration system.
                 function registerNewHouse(){
                     window.alert(CursorLat + " "+ CursorLng);
-=======
-            var firebaseConfig = {
-              apiKey: "AIzaSyD22caki0Faq_SvkK_hEb6Hzbo1xUzARSY",
-              authDomain: "cse327-22a1f.firebaseapp.com",
-              projectId: "cse327-22a1f",
-              storageBucket: "cse327-22a1f.appspot.com",
-              messagingSenderId: "655530972906",
-              appId: "1:655530972906:web:fe3b9ddfeba0926b14a993",
-              measurementId: "G-CFTDRQSXCD"
-            };
-
-            // Initialize Firebase
-            firebase.initializeApp(firebaseConfig);
-          </script>
-          <!--end of Firebase references-->
-
-          <script>
-                //This handles the house registration system.
-                function registerNewHouse(){
-                    firebase.auth().onAuthStateChanged(function(user) {
-                        if (user) {
-                            window.alert(user.email);
-                            window.alert(CursorLat + " "+ CursorLng);
-                        } else {
-                            window.alert("No user.");
-                        }
-                    });
->>>>>>> Stashed changes
                 }
                 function triggerRegisterNewHousePopup(){
                     document.getElementById("registerhousepopup").style.display = "flex";
