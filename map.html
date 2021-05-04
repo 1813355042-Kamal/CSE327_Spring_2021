@@ -35,6 +35,7 @@
                 <a href="#" class="float" onclick="triggerRegisterNewHousePopup()"> <i class="fa fa-home my-float"></i> </a>
                 <div class="label-container"> <div class="label-text">Register New House</div> <i class="fa fa-play label-arrow"></i> </div>
 
+
             <script>
                 mapboxgl.accessToken = 'pk.eyJ1IjoidGhlc2FsbWFuc2FoZWwiLCJhIjoiY2toNHVqNjd4MGZmcDJ4b3Zzdm02bzJlcyJ9.TqZwgHJ7WGvn876yNRN_4w';
                 var map = new mapboxgl.Map({
@@ -110,12 +111,7 @@
                     <li class="nav-item active">
                         <a href="map.html" class="nav-link">Map</a>
                     </li>
-                    <li class="nav-item">
-                        <a href="#" class="nav-link">Services</a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="#" class="nav-link">Contact</a>
-                    </li>
+                    
                     <li class="nav-item">
                         <a href="#" class="nav-link">About Us</a>
                     </li>
@@ -141,38 +137,9 @@
           </div>
 
           <script>
-<<<<<<< Updated upstream
                 //This handles the house registration system.
                 function registerNewHouse(){
                     window.alert(CursorLat + " "+ CursorLng);
-=======
-            var firebaseConfig = {
-              apiKey: "AIzaSyD22caki0Faq_SvkK_hEb6Hzbo1xUzARSY",
-              authDomain: "cse327-22a1f.firebaseapp.com",
-              projectId: "cse327-22a1f",
-              storageBucket: "cse327-22a1f.appspot.com",
-              messagingSenderId: "655530972906",
-              appId: "1:655530972906:web:fe3b9ddfeba0926b14a993",
-              measurementId: "G-CFTDRQSXCD"
-            };
-
-            // Initialize Firebase
-            firebase.initializeApp(firebaseConfig);
-          </script>
-          <!--end of Firebase references-->
-
-          <script>
-                //This handles the house registration system.
-                function registerNewHouse(){
-                    firebase.auth().onAuthStateChanged(function(user) {
-                        if (user) {
-                            window.alert(user.email);
-                            window.alert(CursorLat + " "+ CursorLng);
-                        } else {
-                            window.alert("No user.");
-                        }
-                    });
->>>>>>> Stashed changes
                 }
                 function triggerRegisterNewHousePopup(){
                     document.getElementById("registerhousepopup").style.display = "flex";
@@ -182,7 +149,50 @@
                 }
           </script>
 
+          
+
 
   </body>
+   
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+        body {
+            font-family:Verdana, Geneva, sans-serif;
+            background-color:#CCC;
+            font-size:12px;
+          }
+          
+          .notification {
+            position:fixed;
+            width:60px;
+            height:60px;
+            bottom:120px;
+            right:40px;
+            background-color:rgb(223, 107, 13);
+            color:#FFF;
+            border-radius:50px;
+            text-align:center;
+            box-shadow: 2px 2px 3px #999;
+          }
+          
+          .notification:hover {
+              background: rgb(236, 90, 5);
+          }
+          
+          
+    </style>
+    </head>
+    <body>
+    <a href="#" class="notification" onclick="CheckNotifications()"><i class="far fa-bell my-float"></i> </a>
+      <span>Notifications</span>
+   
+    </a>
+    
+    </body>
+
+
+
+
 
 </html>
