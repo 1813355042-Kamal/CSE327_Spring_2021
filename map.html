@@ -28,6 +28,7 @@
                 var Cursor;
                 var CursorLat;
                 var CursorLng;
+
             </script>
 
                 <div id="map"></div>
@@ -124,13 +125,25 @@
             </div>
           </div>
           </nav>
-
+          <script>
+          function triggerRegisterNewHousePopup(){
+              if(!placedmarker) return;
+              document.getElementById("registerhousepopup").style.display = "flex";
+          }
+          function closeRegisterNewHousePopup(){
+              document.getElementById("registerhousepopup").style.display = "none";
+          }
+          function registerNewHouse(){
+              addHouseinDB();
+          }
+          </script>
           <div class="popup" id="registerhousepopup">
               <div class="popup-content">
                   <p class="lead">Register new house</p>
-                  <input type="text" placeholder= "Rent"></input>
-                  <input type="text" placeholder= "Number of Bedrooms"></input>
-                  <input type="text" placeholder= "Number of Bathrooms"></input>
+                  <input type="text" placeholder= "House Name" id="housename"></input>
+                  <input type="text" placeholder= "Rent" id="rent"></input>
+                  <input type="text" placeholder= "Number of Bedrooms" id="bedrooms"></input>
+                  <input type="text" placeholder= "Number of Bathrooms" id="bathrooms"></input>
                   <a href="#" class="btn btn-register" onclick="registerNewHouse()">
                      Register
                   </a>
@@ -162,24 +175,45 @@
           </script>
           <!--end of Firebase references-->
 
+          <!--Required for firestore-->
+          <script>
+          var db = firebase.firestore();
+          </script>
+          <!--End of firestore references-->
+
           <script>
                 //This handles the house registration system.
-                function registerNewHouse(){
+                function addHouseinDB(){
+                    var _housename = document.getElementById("housename").value;
+                    var _rent = document.getElementById("rent").value;
+                    var _bedrooms = document.getElementById("bedrooms").value;
+                    var _bathrooms = document.getElementById("bathrooms").value;
+
+                    if(_housename == "" || rent=="" || bedrooms == "" || bathrooms == "") return;
+
                     firebase.auth().onAuthStateChanged(function(user) {
                         if (user) {
-                            window.alert(user.email);
-                            window.alert(CursorLat + " "+ CursorLng);
+                            db.collection("Users").doc(user.uid).collection("houses").add({
+                                name: _housename,
+                                rent: _rent,
+                                bedrooms: _bedrooms,
+                                bathrooms: _bedrooms,
+                                Lat: CursorLat,
+                                Lng: CursorLng
+                            })
+                            .then(() => {
+                                console.log("Document successfully written!");
+                            })
+                            .catch((error) => {
+                                console.error("Error writing document: ", error);
+                            });
+                            closeRegisterNewHousePopup();
                         } else {
                             window.alert("No user.");
                         }
                     });
                 }
-                function triggerRegisterNewHousePopup(){
-                    document.getElementById("registerhousepopup").style.display = "flex";
-                }
-                function closeRegisterNewHousePopup(){
-                    document.getElementById("registerhousepopup").style.display = "none";
-                }
+
           </script>
 
 
