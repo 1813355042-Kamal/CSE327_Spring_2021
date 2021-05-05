@@ -37,6 +37,8 @@
 
                 <!-- div class="label-container"> <div class="label-text">Register New House</div> <i class="fa fa-play label-arrow"></i> </div -->
 
+                <a href="#" class="floaty" onclick="triggerFilterPopup()" id= "filterenter"> <i class="fa fa-gear my-float"></i> </a>
+
                 <a href="#" class="floatx" onclick="triggerNotificationsPopup()"> <i class="fa fa-bell my-float"></i> </a>
 
           <!--Start of Nav Bar-->
@@ -74,6 +76,21 @@
           function closeRegisterNewHousePopup(){
               document.getElementById("registerhousepopup").style.display = "none";
           }
+          function triggerFilterPopup(){
+              document.getElementById("filterpopup").style.display = "flex";
+          }
+          function closeFilterPopup(){
+              document.getElementById("filterpopup").style.display = "none";
+          }
+
+          function triggerNotificationsPopup(){
+              document.getElementById("notif").style.display = "flex";
+          }
+
+          function closeNotifications(){
+             document.getElementById("notif").style.display = "none";
+          }
+
           function triggerHousePopup(house){
 
               document.getElementById("housepopup_name").innerHTML = "House Name: "+ house.name;
@@ -105,6 +122,14 @@
                   </a>
               </div>
           </div>
+          <div class="popup" id="notif"><!--Notifications popup-->
+            <div class="popup-content">
+                <p class="lead">Notifications</p>
+                <a href="#" class="btn btn-exit" onclick="closeNotifications()">
+                   Exit
+                </a>
+            </div>
+          </div>
           <div class="popup" id="displayhouseinfopopup">
               <div class="popup-content">
                   <p class="lead" id= "housepopup_name">Sample House Name</p>
@@ -121,29 +146,24 @@
                   </a>
               </div>
           </div>
+          <div class="popup" id="filterpopup">
+              <div class="popup-content">
+                  <p class="lead">Filter Houses</p>
 
-          <div class="popup" id="notif">
-            <div class="popup-content">
-                <p class="lead">Notifications</p>
-                <a href="#" class="btn btn-exit" onclick="closeNotifications()">
-                   Exit
-                </a>
-            </div>
-        </div>
+                  <input type="text" placeholder= "Min Rent" id="minrent"></input>
+                  <input type="text" placeholder= "Max Rent" id="maxrent"></input>
 
-        <script>
-            //Notifications popup.
-            
-            function triggerNotificationsPopup(){
-                document.getElementById("notif").style.display = "flex";
-            }
-            
-            function closeNotifications(){
-              document.getElementById("notif").style.display = "none";
-          }
-            </script>
+                  <input type="text" placeholder= "Min Rooms" id="minrooms"></input>
+                  <input type="text" placeholder= "Max Rooms" id="maxrooms"></input>
 
-        
+                  <a href="#" class="btn btn-register" onclick="filterQuery()">
+                     Ok
+                  </a>
+                  <a href="#" class="btn btn-exit" onclick = "closeFilterPopup()">
+                     Exit
+                  </a>
+              </div>
+          </div>
           <!-- Firebase App (the core Firebase SDK) is always required and must be listed first -->
           <script src="https://www.gstatic.com/firebasejs/8.4.2/firebase-app.js"></script>
 
@@ -364,8 +384,41 @@
                         }
                     });
                 }
+                var housesNoFilter;
+                function filterQuery(){
+                    var minrent=document.getElementById("minrent").value;
+                    var maxrent=document.getElementById("maxrent").value;
+                    var minrooms=document.getElementById("minrooms").value;
+                    var maxrooms=document.getElementById("maxrooms").value;
+                    if(minrent=="" ) minrent = -1;
+                    if(maxrent=="" ) maxrent = 10000000;
+                    if(minrooms=="" ) minrooms = -1;
+                    if(maxrooms=="" ) maxrooms = 10000000;
+                    minrent= Number(minrent);
+                    maxrent= Number(maxrent);
+                    minrooms=Number(minrooms);
+                    maxrooms=Number(maxrooms);
 
-          </script>
+                    var filterJSON = {
+                        'type': 'FeatureCollection',
+                        'features': []
+                    };
+                    console.log(houseJSON);
+                    houseJSON.features.forEach((feat, idx) =>{
+                        var rent=Number(feat.properties.rent);
+                        var rooms=Number(feat.properties.bedrooms);
+                        console.log("minrent, rent, maxrent: ", minrent, rent,maxrent);
+                        console.log("minrooms, rooms, maxrooms: ", minrooms, rooms,maxrooms);
+                        if(minrent <=rent && rent <= maxrent && minrooms<= rooms && rooms <= maxrooms){
+                            console.log("satisfies ", rent);
+                            filterJSON.features.push(feat);
+                        }
+                    });
+                    map.getSource('houseJSON').setData(filterJSON);
+                    closeFilterPopup();
+                }
+
+                </script>
 
 
   </body>

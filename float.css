@@ -55,7 +55,18 @@ body{
 	text-align:center;
 	box-shadow: 2px 2px 3px #999;
 }
-
+.floaty{
+	position:fixed;
+	width:60px;
+	height:60px;
+	bottom:216px;
+	right:40px;
+	background-color:#06C;
+	color:#FFF;
+	border-radius:50px;
+	text-align:center;
+	box-shadow: 2px 2px 3px #999;
+}
 .my-float{
 	font-size:24px;
 	margin-top:18px;
