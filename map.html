@@ -298,8 +298,8 @@
                             db.collection("Root").doc("HouseList").collection("houses").add({
                                 name: _housename,
                                 rent: _rent,
-                                bedrooms: _bedrooms,
-                                bathrooms: _bedrooms,
+                                bedrooms: Number(_bedrooms),
+                                bathrooms: Number(_bedrooms),
                                 Lat: CursorLat,
                                 Lng: CursorLng,
                                 owner: user.email
@@ -318,6 +318,7 @@
                                 console.error("Error writing document: ", error);
                             });
                             closeRegisterNewHousePopup();
+
                         } else {
                             window.alert("No user.");
                         }
