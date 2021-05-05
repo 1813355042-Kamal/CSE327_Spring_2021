@@ -37,7 +37,7 @@
 
                 <!-- div class="label-container"> <div class="label-text">Register New House</div> <i class="fa fa-play label-arrow"></i> </div -->
 
-                <a href="#" class="floatx" onclick="triggerNotificationsPopup()"> <i class="fa fa-bell my-float"></i> </a>
+                <a href="#" class="floatx" onclick="triggerRegisterNewHousePopup()"> <i class="fa fa-bell my-float"></i> </a>
 
           <!--Start of Nav Bar-->
           <nav class="navbar navbar-expand-sm navbar-dark bg-black">
@@ -121,28 +121,6 @@
                   </a>
               </div>
           </div>
-          <div class="popup" id="notif">
-            <div class="popup-content">
-                <p class="lead">Notifications</p>
-                <a href="#" class="btn btn-exit" onclick="closeNotifications()">
-                   Exit
-                </a>
-            </div>
-        </div>
-
-
-
-          <script>
-            //Notifications popup.
-            
-            function triggerNotificationsPopup(){
-                document.getElementById("notif").style.display = "flex";
-            }
-            
-            function closeNotifications(){
-              document.getElementById("notif").style.display = "none";
-          }
-            </script>
           <!-- Firebase App (the core Firebase SDK) is always required and must be listed first -->
           <script src="https://www.gstatic.com/firebasejs/8.4.2/firebase-app.js"></script>
 
