@@ -36,67 +36,6 @@
                 <a href="#" class="float" onclick="triggerRegisterNewHousePopup()"> <i class="fa fa-home my-float"></i> </a>
                 <div class="label-container"> <div class="label-text">Register New House</div> <i class="fa fa-play label-arrow"></i> </div>
 
-            <script>
-                mapboxgl.accessToken = 'pk.eyJ1IjoidGhlc2FsbWFuc2FoZWwiLCJhIjoiY2toNHVqNjd4MGZmcDJ4b3Zzdm02bzJlcyJ9.TqZwgHJ7WGvn876yNRN_4w';
-                var map = new mapboxgl.Map({
-                    container: 'map', // container ID
-                    style: 'mapbox://styles/mapbox/streets-v11', // style URL
-                    center: [90.41, 23.78], // starting position [lng, lat]
-                    zoom: 12 // starting zoom
-                });
-
-                // GeoJSON object to hold our measurement features
-                var geojson = {
-                    'type': 'FeatureCollection',
-                    'features': []
-                };
-
-                map.on('load', function () {
-                    map.addSource('geojson', {
-                        'type': 'geojson',
-                        'data': geojson
-                    });
-
-                    // Add styles to the map
-                    map.addLayer({
-                        id: 'cursor-layer',
-                        type: 'circle',
-                        source: 'geojson',
-                        paint: {
-                            'circle-radius': 5,
-                            'circle-color': '#E00'
-                        },
-                        filter: ['in', '$type', 'Point']
-                    });
-
-
-                    map.on('click', function (e) {
-                        var features = map.queryRenderedFeatures(e.point);
-                        if(placedmarker){
-                        	geojson.features=[];
-                            placedmarker=false;
-                        }
-                        else{
-                        	placedmarker= true;
-                            var point = {
-                                'type': 'Feature',
-                                'geometry': {
-                                    'type': 'Point',
-                                    'coordinates': [e.lngLat.lng, e.lngLat.lat]
-                                },
-                                'properties': {
-                                    'id': 'cursor'
-                                }
-                            };
-                            CursorLat=e.lngLat.lat;
-                            CursorLng=e.lngLat.lng;
-                            geojson.features.push(point);
-                        }
-                        map.getSource('geojson').setData(geojson);
-                    });
-                });
-
-            </script>
 
           <!--Start of Nav Bar-->
           <nav class="navbar navbar-expand-sm navbar-dark bg-black">
@@ -180,10 +119,146 @@
           var db = firebase.firestore();
           </script>
           <!--End of firestore references-->
+          <script>
+              mapboxgl.accessToken = 'pk.eyJ1IjoidGhlc2FsbWFuc2FoZWwiLCJhIjoiY2toNHVqNjd4MGZmcDJ4b3Zzdm02bzJlcyJ9.TqZwgHJ7WGvn876yNRN_4w';
+              var map = new mapboxgl.Map({
+                  container: 'map', // container ID
+                  style: 'mapbox://styles/mapbox/streets-v11', // style URL
+                  center: [90.41, 23.78], // starting position [lng, lat]
+                  zoom: 12 // starting zoom
+              });
+
+              // cursorCordinates object to hold our measurement features
+              var cursorCordinates = {
+                  'type': 'FeatureCollection',
+                  'features': []
+              };
+
+              var houseJSON = {
+                  'type': 'FeatureCollection',
+                  'features': []
+              };
+
+              map.on('load', function () {
+
+                  map.addSource('cursorCordinates', {
+                      'type': 'geojson',
+                      'data': cursorCordinates
+                  });
+                  map.addSource('houseJSON', {
+                      'type': 'geojson',
+                      'data': houseJSON
+                  });
+
+                  map.loadImage(
+                      'https://docs.mapbox.com/mapbox-gl-js/assets/custom_marker.png',
+                      function (error, image) {
+                          if (error) throw error;
+                          map.addImage('custom-marker', image);
+                          map.getSource('houseJSON').setData(houseJSON);
+                          // Add a symbol layer
+                          map.addLayer({
+                              'id': 'house-layer',
+                              'type': 'symbol',
+                              'source': 'houseJSON',
+                              'layout': {
+                                  'icon-image': 'custom-marker',
+                                  // get the title name from the source's "title" property
+                                  'text-field': ['get', 'title'],
+                                  'text-font': [
+                                      'Open Sans Semibold',
+                                      'Arial Unicode MS Bold'
+                                  ],
+                                  'text-offset': [0, 1.25],
+                                  'text-anchor': 'top'
+                              }
+                          });
+                      }
+                  );
+                          // Add styles to the map
+                  map.addLayer({
+                      id: 'cursor-layer',
+                      type: 'circle',
+                      source: 'cursorCordinates',
+                      paint: {
+                          'circle-radius': 5,
+                          'circle-color': '#E00'
+                      },
+                      filter: ['in', '$type', 'Point']
+                  });
+
+
+                  map.on('click', function (e) {
+                      var features = map.queryRenderedFeatures(e.point, {
+                          layers: ['house-layer'] // Since we're interested in the housing layer, we'll specify it here
+                      });
+
+                      if(!features.length){   //No house clicked. handle cursor placement.
+                          if(placedmarker){
+                              cursorCordinates.features=[];
+                              placedmarker=false;
+                          }
+                          else{
+                              placedmarker= true;
+                              var point = {
+                                  'type': 'Feature',
+                                  'geometry': {
+                                      'type': 'Point',
+                                      'coordinates': [e.lngLat.lng, e.lngLat.lat]
+                                  },
+                                  'properties': {
+                                      'id': 'cursor'
+                                  }
+                              };
+                              CursorLat=e.lngLat.lat;
+                              CursorLng=e.lngLat.lng;
+                              cursorCordinates.features.push(point);
+                          }
+                          map.getSource('cursorCordinates').setData(cursorCordinates);
+                      }
+                      //Clicked on House
+                      else{
+                          var feature = features[0];
+                          
+                      }
+                  });
+              });
+
+          </script>
 
           <script>
+                function databaseFetch(){
+                    houseJSON.features=[];
+                    db.collection("Root/HouseList/houses")
+                    .get()
+                    .then((querySnapshot) => {
+                        querySnapshot.forEach((doc) => {
+                            var house = doc.data();
+                            //console.log(house["Lat"], house["Lng"]);
+                            var point = {
+                                'type': 'Feature',
+                                'geometry': {
+                                    'type': 'Point',
+                                    'coordinates': [house["Lng"], house["Lat"]]
+                                },
+                                'properties': {
+                                    'id': 'house',
+                                    'name': house["name"],
+                                    'rent': house["rent"],
+                                    'bedrooms': house["bedrooms"],
+                                    'bathrooms': house["bathrooms"]
+                                }
+                            };
+                            houseJSON.features.push(point);
+                    });
+                    map.getSource('houseJSON').setData(houseJSON);
+                    }).catch((error) => {
+                        console.log("Error getting documents: ", error);
+                    });
+                }
                 //This handles the house registration system.
                 function addHouseinDB(){
+                    databaseFetch();
                     var _housename = document.getElementById("housename").value;
                     var _rent = document.getElementById("rent").value;
                     var _bedrooms = document.getElementById("bedrooms").value;
@@ -193,16 +268,24 @@
 
                     firebase.auth().onAuthStateChanged(function(user) {
                         if (user) {
-                            db.collection("Users").doc(user.uid).collection("houses").add({
+                            db.collection("Root").doc("HouseList").collection("houses").add({
                                 name: _housename,
                                 rent: _rent,
                                 bedrooms: _bedrooms,
                                 bathrooms: _bedrooms,
                                 Lat: CursorLat,
-                                Lng: CursorLng
+                                Lng: CursorLng,
+                                owner: user.email
                             })
-                            .then(() => {
-                                console.log("Document successfully written!");
+                            .then((doc) => {
+                                //For notifications, access "Root/notifs/user.email"
+                                //insert _housename and house doc.id.
+                                //to delete notification (and listing), search through Root/HouseList/houses for "doc.id" named listing.
+                                db.collection("Root").doc("Users").collection(user.email).add({
+                                    id:doc.id
+                                }).catch((error) => {
+                                    console.error("Error writing document: ", error);
+                                });
                             })
                             .catch((error) => {
                                 console.error("Error writing document: ", error);
