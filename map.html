@@ -179,15 +179,74 @@
           .notification:hover {
               background: rgb(236, 90, 5);
           }
+          .popup{
+            background: rgba(0,0,0,0.6);
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            top: 0;
+            display: none;
+            justify-content: center;
+            align-content: center;
+            text-align: center;
+        }
+          .popup-content{
+            height: 400px;
+            width: 500px;
+            top:50px;
+            background: #fff;
+            padding: 20px;
+            border-radius: 5px;
+            position: relative;
+        }
+        .btn-exit{
+            background-color: rgb(235, 88, 77); /* Green */
+            border: none;
+            color: white;
+            padding: 15px 32px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            top:360px;
+            position: absolute;
+        }
+        .btn-exit:hover{
+            color: rgb(255, 255, 255);
+        }
+          
           
           
     </style>
     </head>
     <body>
-    <a href="#" class="notification" onclick="CheckNotifications()"><i class="far fa-bell my-float"></i> </a>
+    <a href="#" class="notification" onclick="checkNotificationspopup()"><i class="far fa-bell my-float"></i> </a>
       <span>Notifications</span>
    
     </a>
+
+    <div class="popup" id="notif">
+        <div class="popup-content">
+            <p class="lead">Notifications</p>
+            
+            
+        </div>
+        <a href="#" class="btn btn-exit" onclick = "closeNotifications()">
+            Exit
+         </a>
+    </div>
+
+    <script>
+          //Notifications popup.
+          
+          function checkNotificationspopup(){
+              document.getElementById("notif").style.display = "flex";
+          }
+          
+          function closeNotifications(){
+            document.getElementById("notif").style.display = "none";
+        }
+    </script>
     
     </body>
 
