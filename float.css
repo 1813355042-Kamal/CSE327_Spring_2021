@@ -49,7 +49,7 @@ body{
 	height:60px;
 	bottom:128px;
 	right:40px;
-	background-color:#06C;
+	background-color:rgb(230, 136, 49);
 	color:#FFF;
 	border-radius:50px;
 	text-align:center;
@@ -112,6 +112,7 @@ input{
 .btn-exit{
     background: rgb(235, 88, 77);
     color: rgb(230, 230, 230);
+	justify-content: center;
 }
 .btn-exit:hover{
     color: rgb(255, 255, 255);
