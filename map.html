@@ -72,6 +72,18 @@
           function closeRegisterNewHousePopup(){
               document.getElementById("registerhousepopup").style.display = "none";
           }
+          function triggerHousePopup(house){
+              // document.getElementById("housepopup_name").value = house.name;
+              // document.getElementById("housepopup_rent").value = house.rent;
+              // document.getElementById("housepopup_bedrooms").value = house.bedrooms;
+              // document.getElementById("housepopup_bathrooms").value = house.bathrooms;
+              // document.getElementById("displayhouseinfopopup").style.display = "flex";
+
+
+          }
+          function closeHousePopup(house){
+              document.getElementById("displayhouseinfopopup").style.display = "none";
+          }
           function registerNewHouse(){
               addHouseinDB();
           }
@@ -87,6 +99,20 @@
                      Register
                   </a>
                   <a href="#" class="btn btn-exit" onclick = "closeRegisterNewHousePopup()">
+                     Exit
+                  </a>
+              </div>
+          </div>
+          <div class="popup" id="displayhouseinfopopup">
+              <div class="popup-content">
+                  <p class="lead" id= "housepopup_name">Sample House Name</p>
+                  <p class="lead" id= "housepopup_rent">Rent: 69</p>
+                  <p class="lead" id= "housepopup_bedrooms">Bedrooms: 4</p>
+                  <p class="lead" id= "housepopup_bathrooms">Bathrooms: 20</p>
+                  <a href="#" class="btn btn-register">
+                     Register
+                  </a>
+                  <a href="#" class="btn btn-exit" onclick = "closeHousePopup()">
                      Exit
                   </a>
               </div>
@@ -219,14 +245,14 @@
                       //Clicked on House
                       else{
                           var feature = features[0];
-                          
+                          triggerHousePopup(feature);
                       }
                   });
               });
-
           </script>
 
           <script>
+                //Updates Map with current data from database.
                 function databaseFetch(){
                     houseJSON.features=[];
                     db.collection("Root/HouseList/houses")
@@ -256,6 +282,7 @@
                         console.log("Error getting documents: ", error);
                     });
                 }
+
                 //This handles the house registration system.
                 function addHouseinDB(){
                     databaseFetch();
