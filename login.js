@@ -50,7 +50,6 @@ function persistentlogin(){
 }
 function login(){
 
-<<<<<<< Updated upstream
   var userEmail = document.getElementById("email_field").value;
   var userPass = document.getElementById("password_field").value;
 
@@ -64,7 +63,6 @@ function login(){
     // ...
   });
 
-=======
     firebase.auth().signInWithEmailAndPassword(userEmail, userPass).then(function(usr_){
         window.location.href = 'map.html';
     }).catch(function(error){
@@ -72,7 +70,6 @@ function login(){
         var errorMessage = error.message;
         window.alert("Error : " + errorMessage);
     });
->>>>>>> Stashed changes
 }
 
 function logout(){

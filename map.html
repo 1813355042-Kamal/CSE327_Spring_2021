@@ -28,75 +28,16 @@
                 var Cursor;
                 var CursorLat;
                 var CursorLng;
+                var currentHouse;
             </script>
 
                 <div id="map"></div>
                 <div id="clickmarker"></div>
                 <a href="#" class="float" onclick="triggerRegisterNewHousePopup()"> <i class="fa fa-home my-float"></i> </a>
-                <div class="label-container"> <div class="label-text">Register New House</div> <i class="fa fa-play label-arrow"></i> </div>
 
+                <!-- div class="label-container"> <div class="label-text">Register New House</div> <i class="fa fa-play label-arrow"></i> </div -->
 
-            <script>
-                mapboxgl.accessToken = 'pk.eyJ1IjoidGhlc2FsbWFuc2FoZWwiLCJhIjoiY2toNHVqNjd4MGZmcDJ4b3Zzdm02bzJlcyJ9.TqZwgHJ7WGvn876yNRN_4w';
-                var map = new mapboxgl.Map({
-                    container: 'map', // container ID
-                    style: 'mapbox://styles/mapbox/streets-v11', // style URL
-                    center: [90.41, 23.78], // starting position [lng, lat]
-                    zoom: 12 // starting zoom
-                });
-
-                // GeoJSON object to hold our measurement features
-                var geojson = {
-                    'type': 'FeatureCollection',
-                    'features': []
-                };
-
-                map.on('load', function () {
-                    map.addSource('geojson', {
-                        'type': 'geojson',
-                        'data': geojson
-                    });
-
-                    // Add styles to the map
-                    map.addLayer({
-                        id: 'cursor-layer',
-                        type: 'circle',
-                        source: 'geojson',
-                        paint: {
-                            'circle-radius': 5,
-                            'circle-color': '#E00'
-                        },
-                        filter: ['in', '$type', 'Point']
-                    });
-
-
-                    map.on('click', function (e) {
-                        var features = map.queryRenderedFeatures(e.point);
-                        if(placedmarker){
-                        	geojson.features=[];
-                            placedmarker=false;
-                        }
-                        else{
-                        	placedmarker= true;
-                            var point = {
-                                'type': 'Feature',
-                                'geometry': {
-                                    'type': 'Point',
-                                    'coordinates': [e.lngLat.lng, e.lngLat.lat]
-                                },
-                                'properties': {
-                                    'id': 'cursor'
-                                }
-                            };
-                            CursorLat=e.lngLat.lat;
-                            CursorLng=e.lngLat.lng;
-                            geojson.features.push(point);
-                        }
-                        map.getSource('geojson').setData(geojson);
-                    });
-                });
-
-            </script>
+                <a href="#" class="floatx" onclick="triggerRegisterNewHousePopup()"> <i class="fa fa-bell my-float"></i> </a>
 
           <!--Start of Nav Bar-->
           <nav class="navbar navbar-expand-sm navbar-dark bg-black">
@@ -111,7 +52,12 @@
                     <li class="nav-item active">
                         <a href="map.html" class="nav-link">Map</a>
                     </li>
-                    
+                    <li class="nav-item">
+                        <a href="#" class="nav-link">Services</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#" class="nav-link">Contact</a>
+                    </li>
                     <li class="nav-item">
                         <a href="#" class="nav-link">About Us</a>
                     </li>
@@ -120,13 +66,37 @@
             </div>
           </div>
           </nav>
+          <script>
+          function triggerRegisterNewHousePopup(){
+              if(!placedmarker) return;
+              document.getElementById("registerhousepopup").style.display = "flex";
+          }
+          function closeRegisterNewHousePopup(){
+              document.getElementById("registerhousepopup").style.display = "none";
+          }
+          function triggerHousePopup(house){
 
+              document.getElementById("housepopup_name").innerHTML = "House Name: "+ house.name;
+              document.getElementById("housepopup_rent").innerHTML = "Rent: "+house.rent;
+              document.getElementById("housepopup_bedrooms").innerHTML = "Bedrooms: "+house.bedrooms;
+              document.getElementById("housepopup_bathrooms").innerHTML = "Bathrooms: "+house.bathrooms;
+              document.getElementById("displayhouseinfopopup").style.display = "flex";
+
+          }
+          function closeHousePopup(house){
+              document.getElementById("displayhouseinfopopup").style.display = "none";
+          }
+          function registerNewHouse(){
+              addHouseinDB();
+          }
+          </script>
           <div class="popup" id="registerhousepopup">
               <div class="popup-content">
                   <p class="lead">Register new house</p>
-                  <input type="text" placeholder= "Rent"></input>
-                  <input type="text" placeholder= "Number of Bedrooms"></input>
-                  <input type="text" placeholder= "Number of Bathrooms"></input>
+                  <input type="text" placeholder= "House Name" id="housename"></input>
+                  <input type="text" placeholder= "Rent" id="rent"></input>
+                  <input type="text" placeholder= "Number of Bedrooms" id="bedrooms"></input>
+                  <input type="text" placeholder= "Number of Bathrooms" id="bathrooms"></input>
                   <a href="#" class="btn btn-register" onclick="registerNewHouse()">
                      Register
                   </a>
@@ -135,123 +105,246 @@
                   </a>
               </div>
           </div>
+          <div class="popup" id="displayhouseinfopopup">
+              <div class="popup-content">
+                  <p class="lead" id= "housepopup_name">Sample House Name</p>
+                  <p class="lead" id= "housepopup_rent">Rent: 69</p>
+                  <p class="lead" id= "housepopup_bedrooms">Bedrooms: 4</p>
+                  <p class="lead" id= "housepopup_bathrooms">Bathrooms: 20</p>
+                  <br><br><br><br><br><br>
 
+                  <a href="#" class="btn btn-register" onclick="clickInterested()">
+                     Interested
+                  </a>
+                  <a href="#" class="btn btn-exit" onclick = "closeHousePopup()">
+                     Exit
+                  </a>
+              </div>
+          </div>
+          <!-- Firebase App (the core Firebase SDK) is always required and must be listed first -->
+          <script src="https://www.gstatic.com/firebasejs/8.4.2/firebase-app.js"></script>
+
+          <!-- Add Firebase products that you want to use -->
+          <script src="https://www.gstatic.com/firebasejs/8.4.2/firebase-auth.js"></script>
+          <script src="https://www.gstatic.com/firebasejs/8.4.2/firebase-firestore.js"></script>
           <script>
-                //This handles the house registration system.
-                function registerNewHouse(){
-                    window.alert(CursorLat + " "+ CursorLng);
-                }
-                function triggerRegisterNewHousePopup(){
-                    document.getElementById("registerhousepopup").style.display = "flex";
-                }
-                function closeRegisterNewHousePopup(){
-                    document.getElementById("registerhousepopup").style.display = "none";
+
+            var firebaseConfig = {
+              apiKey: "AIzaSyD22caki0Faq_SvkK_hEb6Hzbo1xUzARSY",
+              authDomain: "cse327-22a1f.firebaseapp.com",
+              projectId: "cse327-22a1f",
+              storageBucket: "cse327-22a1f.appspot.com",
+              messagingSenderId: "655530972906",
+              appId: "1:655530972906:web:fe3b9ddfeba0926b14a993",
+              measurementId: "G-CFTDRQSXCD"
+            };
+
+            // Initialize Firebase
+            firebase.initializeApp(firebaseConfig);
+          </script>
+          <!--end of Firebase references-->
+
+          <!--Required for firestore-->
+          <script>
+          var db = firebase.firestore();
+          </script>
+          <!--End of firestore references-->
+          <script>
+              mapboxgl.accessToken = 'pk.eyJ1IjoidGhlc2FsbWFuc2FoZWwiLCJhIjoiY2toNHVqNjd4MGZmcDJ4b3Zzdm02bzJlcyJ9.TqZwgHJ7WGvn876yNRN_4w';
+              var map = new mapboxgl.Map({
+                  container: 'map', // container ID
+                  style: 'mapbox://styles/mapbox/streets-v11', // style URL
+                  center: [90.41, 23.78], // starting position [lng, lat]
+                  zoom: 12 // starting zoom
+              });
+
+              // cursorCordinates object to hold our measurement features
+              var cursorCordinates = {
+                  'type': 'FeatureCollection',
+                  'features': []
+              };
+
+              var houseJSON = {
+                  'type': 'FeatureCollection',
+                  'features': []
+              };
+
+              map.on('load', function () {
+
+                  map.addSource('cursorCordinates', {
+                      'type': 'geojson',
+                      'data': cursorCordinates
+                  });
+                  map.addSource('houseJSON', {
+                      'type': 'geojson',
+                      'data': houseJSON
+                  });
+
+                  map.loadImage(
+                      'https://docs.mapbox.com/mapbox-gl-js/assets/custom_marker.png',
+                      function (error, image) {
+                          if (error) throw error;
+                          map.addImage('custom-marker', image);
+                          map.getSource('houseJSON').setData(houseJSON);
+                          // Add a symbol layer
+                          map.addLayer({
+                              'id': 'house-layer',
+                              'type': 'symbol',
+                              'source': 'houseJSON',
+                              'layout': {
+                                  'icon-image': 'custom-marker',
+                                  // get the title name from the source's "title" property
+                                  'text-field': ['get', 'title'],
+                                  'text-font': [
+                                      'Open Sans Semibold',
+                                      'Arial Unicode MS Bold'
+                                  ],
+                                  'text-offset': [0, 1.25],
+                                  'text-anchor': 'top'
+                              }
+                          });
+                      }
+                  );
+                          // Add styles to the map
+                  map.addLayer({
+                      id: 'cursor-layer',
+                      type: 'circle',
+                      source: 'cursorCordinates',
+                      paint: {
+                          'circle-radius': 5,
+                          'circle-color': '#E00'
+                      },
+                      filter: ['in', '$type', 'Point']
+                  });
+
+
+                  map.on('click', function (e) {
+                      var features = map.queryRenderedFeatures(e.point, {
+                          layers: ['house-layer'] // Since we're interested in the housing layer, we'll specify it here
+                      });
+
+                      if(!features.length){   //No house clicked. handle cursor placement.
+                          if(placedmarker){
+                              cursorCordinates.features=[];
+                              placedmarker=false;
+                          }
+                          else{
+                              placedmarker= true;
+                              var point = {
+                                  'type': 'Feature',
+                                  'geometry': {
+                                      'type': 'Point',
+                                      'coordinates': [e.lngLat.lng, e.lngLat.lat]
+                                  },
+                                  'properties': {
+                                      'id': 'cursor'
+                                  }
+                              };
+                              CursorLat=e.lngLat.lat;
+                              CursorLng=e.lngLat.lng;
+                              cursorCordinates.features.push(point);
+                          }
+                          map.getSource('cursorCordinates').setData(cursorCordinates);
+                      }
+                      //Clicked on House
+                      else{
+                          var feature = features[0];
+                          currentHouse = feature.properties;
+                          triggerHousePopup(feature.properties);
+                      }
+                  });
+              });
+          </script>
+          <script>
+                function clickInterested(){
+                    firebase.auth().onAuthStateChanged(function(user) {
+                        if (user) {
+                            db.collection("Root/Notification/" + currentHouse.owner).add({'msg': user.email + " is interested in your house named " + currentHouse.name});
+                        } else {
+                            window.alert("No user.");
+                        }
+                    });
+
                 }
           </script>
+          <script>
+                //Updates Map with current data from database.
+                function databaseFetch(){
+                    houseJSON.features=[];
+                    db.collection("Root/HouseList/houses")
+                    .get()
+                    .then((querySnapshot) => {
+                        querySnapshot.forEach((doc) => {
+                            var house = doc.data();
+                            //console.log(house["Lat"], house["Lng"]);
+                            var point = {
+                                'type': 'Feature',
+                                'geometry': {
+                                    'type': 'Point',
+                                    'coordinates': [house["Lng"], house["Lat"]]
+                                },
+                                'properties': {
+                                    'id': 'house',
+                                    'name': house["name"],
+                                    'rent': house["rent"],
+                                    'bedrooms': house["bedrooms"],
+                                    'bathrooms': house["bathrooms"],
+                                    'owner': house["owner"]
+                                }
+                            };
+                            houseJSON.features.push(point);
+                    });
+                    map.getSource('houseJSON').setData(houseJSON);
+                    }).catch((error) => {
+                        console.log("Error getting documents: ", error);
+                    });
+                }
 
-          
+                //This handles the house registration system.
+                function addHouseinDB(){
+                    databaseFetch();
+                    var _housename = document.getElementById("housename").value;
+                    var _rent = document.getElementById("rent").value;
+                    var _bedrooms = document.getElementById("bedrooms").value;
+                    var _bathrooms = document.getElementById("bathrooms").value;
+
+                    if(_housename == "" || rent=="" || bedrooms == "" || bathrooms == "") return;
+
+                    firebase.auth().onAuthStateChanged(function(user) {
+                        if (user) {
+                            db.collection("Root").doc("HouseList").collection("houses").add({
+                                name: _housename,
+                                rent: _rent,
+                                bedrooms: Number(_bedrooms),
+                                bathrooms: Number(_bedrooms),
+                                Lat: CursorLat,
+                                Lng: CursorLng,
+                                owner: user.email
+                            })
+                            .then((doc) => {
+                                //For notifications, access "Root/notifs/user.email"
+                                //insert _housename and house doc.id.
+                                //to delete notification (and listing), search through Root/HouseList/houses for "doc.id" named listing.
+                                db.collection("Root").doc("Users").collection(user.email).add({
+                                    id:doc.id
+                                }).catch((error) => {
+                                    console.error("Error writing document: ", error);
+                                });
+                            })
+                            .catch((error) => {
+                                console.error("Error writing document: ", error);
+                            });
+                            closeRegisterNewHousePopup();
+
+                        } else {
+                            window.alert("No user.");
+                        }
+                    });
+                }
+
+          </script>
 
 
   </body>
-   
-  <head>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <style>
-        body {
-            font-family:Verdana, Geneva, sans-serif;
-            background-color:#CCC;
-            font-size:12px;
-          }
-          
-          .notification {
-            position:fixed;
-            width:60px;
-            height:60px;
-            bottom:120px;
-            right:40px;
-            background-color:rgb(223, 107, 13);
-            color:#FFF;
-            border-radius:50px;
-            text-align:center;
-            box-shadow: 2px 2px 3px #999;
-          }
-          
-          .notification:hover {
-              background: rgb(236, 90, 5);
-          }
-          .popup{
-            background: rgba(0,0,0,0.6);
-            width: 100%;
-            height: 100%;
-            position: absolute;
-            top: 0;
-            display: none;
-            justify-content: center;
-            align-content: center;
-            text-align: center;
-        }
-          .popup-content{
-            height: 400px;
-            width: 500px;
-            top:50px;
-            background: #fff;
-            padding: 20px;
-            border-radius: 5px;
-            position: relative;
-        }
-        .notifbtn-exit{
-            background-color: rgb(235, 88, 77); /* Green */
-            border: none;
-            color: white;
-            padding: 15px 32px;
-            text-align: center;
-            text-decoration: none;
-            display: inline-block;
-            font-size: 16px;
-            top:360px;
-            position: absolute;
-        }
-        .notifbtn-exit:hover{
-            color: rgb(255, 255, 255);
-        }
-          
-          
-          
-    </style>
-    </head>
-    <body>
-    <a href="#" class="notification" onclick="checkNotificationspopup()"><i class="far fa-bell my-float"></i> </a>
-      <span>Notifications</span>
-   
-    </a>
-
-    <div class="popup" id="notif">
-        <div class="popup-content">
-            <p class="lead">Notifications</p>
-            
-            
-        </div>
-        <a href="#" class="btn notifbtn-exit" onclick = "closeNotifications()">
-            Exit
-         </a>
-    </div>
-
-    <script>
-          //Notifications popup.
-          
-          function checkNotificationspopup(){
-              document.getElementById("notif").style.display = "flex";
-          }
-          
-          function closeNotifications(){
-            document.getElementById("notif").style.display = "none";
-        }
-    </script>
-    
-    </body>
-
-
-
-
 
 </html>
