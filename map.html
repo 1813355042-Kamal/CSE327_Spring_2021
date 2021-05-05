@@ -63,23 +63,7 @@
                 </ul>
             </div>
           </div>
-
           </nav>
-          <a href="#" class="notification" onclick="checkNotificationspopup()"><i class="far fa-bell my-float"></i> </a>
-          <span>Notifications</span>
-
-            </a>
-
-         <div class="npopup" id="notif">
-        <div class="npopup-content">
-        <p class="lead">Notifications</p>
-      
-      
-        </div>
-         <a href="#" class="btn notifbtn-exit" onclick = "closeNotifications()">
-            Exit
-            </a>
-        </div>
           <script>
           function triggerRegisterNewHousePopup(){
               if(!placedmarker) return;
@@ -133,23 +117,8 @@
                   </a>
               </div>
           </div>
-
-          <script>
-            //Notifications popup.
-            
-            function checkNotificationspopup(){
-                document.getElementById("notif").style.display = "flex";
-            }
-            
-            function closeNotifications(){
-              document.getElementById("notif").style.display = "none";
-          }
-            </script>
-
           <!-- Firebase App (the core Firebase SDK) is always required and must be listed first -->
           <script src="https://www.gstatic.com/firebasejs/8.4.2/firebase-app.js"></script>
-
-
 
           <!-- Add Firebase products that you want to use -->
           <script src="https://www.gstatic.com/firebasejs/8.4.2/firebase-auth.js"></script>
@@ -359,6 +328,6 @@
           </script>
 
 
-
   </body>
+
 </html>
