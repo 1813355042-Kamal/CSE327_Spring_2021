@@ -43,6 +43,19 @@ body{
 	box-shadow: 2px 2px 3px #999;
 }
 
+.floatx{
+	position:fixed;
+	width:60px;
+	height:60px;
+	bottom:128px;
+	right:40px;
+	background-color:#06C;
+	color:#FFF;
+	border-radius:50px;
+	text-align:center;
+	box-shadow: 2px 2px 3px #999;
+}
+
 .my-float{
 	font-size:24px;
 	margin-top:18px;
@@ -103,57 +116,3 @@ input{
 .btn-exit:hover{
     color: rgb(255, 255, 255);
 }
-
-.notification {
-	position:fixed;
-	width:60px;
-	height:60px;
-	bottom:120px;
-	right:40px;
-	background-color:rgb(223, 107, 13);
-	color:#FFF;
-	border-radius:50px;
-	text-align:center;
-	box-shadow: 2px 2px 3px #999;
-  }
-  
-  .notification:hover {
-	  background: rgb(236, 90, 5);
-  }
-  .npopup{
-	background: rgba(0,0,0,0.6);
-	width: 100%;
-	height: 100%;
-	position: absolute;
-	top: 0;
-	display: none;
-	justify-content: center;
-	align-content: center;
-	text-align: center;
-}
-  .npopup-content{
-	height: 400px;
-	width: 500px;
-	top:50px;
-	background: #fff;
-	padding: 20px;
-	border-radius: 5px;
-	position: relative;
-}
-.notifbtn-exit{
-	background-color: rgb(235, 88, 77); /* Green */
-	border: none;
-	color: white;
-	padding: 15px 32px;
-	text-align: center;
-	text-decoration: none;
-	display: inline-block;
-	font-size: 16px;
-	top:360px;
-	position: absolute;
-}
-.notifbtn-exit:hover{
-	color: rgb(255, 255, 255);
-}
-
-  

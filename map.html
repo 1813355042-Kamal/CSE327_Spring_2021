@@ -28,14 +28,16 @@
                 var Cursor;
                 var CursorLat;
                 var CursorLng;
-
+                var currentHouse;
             </script>
 
                 <div id="map"></div>
                 <div id="clickmarker"></div>
                 <a href="#" class="float" onclick="triggerRegisterNewHousePopup()"> <i class="fa fa-home my-float"></i> </a>
-                <div class="label-container"> <div class="label-text">Register New House</div> <i class="fa fa-play label-arrow"></i> </div>
 
+                <!-- div class="label-container"> <div class="label-text">Register New House</div> <i class="fa fa-play label-arrow"></i> </div -->
+
+                <a href="#" class="floatx" onclick="triggerRegisterNewHousePopup()"> <i class="fa fa-bell my-float"></i> </a>
 
           <!--Start of Nav Bar-->
           <nav class="navbar navbar-expand-sm navbar-dark bg-black">
@@ -63,23 +65,7 @@
                 </ul>
             </div>
           </div>
-
           </nav>
-          <a href="#" class="notification" onclick="checkNotificationspopup()"><i class="far fa-bell my-float"></i> </a>
-          <span>Notifications</span>
-
-            </a>
-
-         <div class="npopup" id="notif">
-        <div class="npopup-content">
-        <p class="lead">Notifications</p>
-      
-      
-        </div>
-         <a href="#" class="btn notifbtn-exit" onclick = "closeNotifications()">
-            Exit
-            </a>
-        </div>
           <script>
           function triggerRegisterNewHousePopup(){
               if(!placedmarker) return;
@@ -89,12 +75,12 @@
               document.getElementById("registerhousepopup").style.display = "none";
           }
           function triggerHousePopup(house){
-              // document.getElementById("housepopup_name").value = house.name;
-              // document.getElementById("housepopup_rent").value = house.rent;
-              // document.getElementById("housepopup_bedrooms").value = house.bedrooms;
-              // document.getElementById("housepopup_bathrooms").value = house.bathrooms;
-              // document.getElementById("displayhouseinfopopup").style.display = "flex";
 
+              document.getElementById("housepopup_name").innerHTML = "House Name: "+ house.name;
+              document.getElementById("housepopup_rent").innerHTML = "Rent: "+house.rent;
+              document.getElementById("housepopup_bedrooms").innerHTML = "Bedrooms: "+house.bedrooms;
+              document.getElementById("housepopup_bathrooms").innerHTML = "Bathrooms: "+house.bathrooms;
+              document.getElementById("displayhouseinfopopup").style.display = "flex";
 
           }
           function closeHousePopup(house){
@@ -125,31 +111,18 @@
                   <p class="lead" id= "housepopup_rent">Rent: 69</p>
                   <p class="lead" id= "housepopup_bedrooms">Bedrooms: 4</p>
                   <p class="lead" id= "housepopup_bathrooms">Bathrooms: 20</p>
-                  <a href="#" class="btn btn-register">
-                     Register
+                  <br><br><br><br><br><br>
+
+                  <a href="#" class="btn btn-register" onclick="clickInterested()">
+                     Interested
                   </a>
                   <a href="#" class="btn btn-exit" onclick = "closeHousePopup()">
                      Exit
                   </a>
               </div>
           </div>
-
-          <script>
-            //Notifications popup.
-            
-            function checkNotificationspopup(){
-                document.getElementById("notif").style.display = "flex";
-            }
-            
-            function closeNotifications(){
-              document.getElementById("notif").style.display = "none";
-          }
-            </script>
-
           <!-- Firebase App (the core Firebase SDK) is always required and must be listed first -->
           <script src="https://www.gstatic.com/firebasejs/8.4.2/firebase-app.js"></script>
-
-
 
           <!-- Add Firebase products that you want to use -->
           <script src="https://www.gstatic.com/firebasejs/8.4.2/firebase-auth.js"></script>
@@ -276,12 +249,24 @@
                       //Clicked on House
                       else{
                           var feature = features[0];
-                          triggerHousePopup(feature);
+                          currentHouse = feature.properties;
+                          triggerHousePopup(feature.properties);
                       }
                   });
               });
           </script>
+          <script>
+                function clickInterested(){
+                    firebase.auth().onAuthStateChanged(function(user) {
+                        if (user) {
+                            db.collection("Root/Notification/" + currentHouse.owner).add({'msg': user.email + " is interested in your house named " + currentHouse.name});
+                        } else {
+                            window.alert("No user.");
+                        }
+                    });
 
+                }
+          </script>
           <script>
                 //Updates Map with current data from database.
                 function databaseFetch(){
@@ -303,7 +288,8 @@
                                     'name': house["name"],
                                     'rent': house["rent"],
                                     'bedrooms': house["bedrooms"],
-                                    'bathrooms': house["bathrooms"]
+                                    'bathrooms': house["bathrooms"],
+                                    'owner': house["owner"]
                                 }
                             };
                             houseJSON.features.push(point);
@@ -359,6 +345,6 @@
           </script>
 
 
-
   </body>
+
 </html>
