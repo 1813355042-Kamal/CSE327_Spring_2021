@@ -11,6 +11,7 @@
     <link rel="stylesheet" href="main.css">
     <link rel="stylesheet" href="float.css">
 
+
     <script src="https://kit.fontawesome.com/7bf1794c28.js" crossorigin="anonymous"></script>
     <link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet">
     <!-- Mapbox Scripts-->
@@ -29,7 +30,9 @@
                 var CursorLat;
                 var CursorLng;
                 var currentHouse;
+                var myMessages = [];
             </script>
+
 
                 <div id="map"></div>
                 <div id="clickmarker"></div>
@@ -45,7 +48,6 @@
           <nav class="navbar navbar-expand-sm navbar-dark bg-black">
           <div class="container">
               <a href="index.html" class="navbar-brand">BharaTiya</a>
-
             <div class="collapse navbar-collapse "id="navbarCollapse">
                 <ul class="navbar-nav ml-auto">
                     <li class="nav-item">
@@ -83,7 +85,8 @@
               document.getElementById("filterpopup").style.display = "none";
           }
 
-          function triggerNotificationsPopup(){
+          async function triggerNotificationsPopup(){              
+              await getNotificationsFromDatabase();
               document.getElementById("notif").style.display = "flex";
           }
 
@@ -122,9 +125,13 @@
                   </a>
               </div>
           </div>
+
           <div class="popup" id="notif"><!--Notifications popup-->
-            <div class="popup-content">
+            <div class="popup-notif">
                 <p class="lead">Notifications</p>
+                <ul class="msglisg" id ="notificationmessages">
+                </ul>
+                <br>
                 <a href="#" class="btn btn-exit" onclick="closeNotifications()">
                    Exit
                 </a>
@@ -416,6 +423,31 @@
                     });
                     map.getSource('houseJSON').setData(filterJSON);
                     closeFilterPopup();
+                }
+
+                async function getNotificationsFromDatabase(){
+                    firebase.auth().onAuthStateChanged(function(user) {
+                        if (user) {
+                            myMessages=[];
+                            document.getElementById("notificationmessages").innerHTML="";
+                            db.collection("Root/Notification/"+user.email)
+                            .get()
+                            .then((querySnapshot) => {
+                                querySnapshot.forEach((doc, idx) => {
+                                    console.log(doc.id);
+                                    myMessages.push(doc.data()["msg"]);
+                                });
+                                myMessages.forEach((msg) => {
+                                    document.getElementById("notificationmessages").innerHTML+= "<li class=\"msgItem\">"+msg+"</li>";
+                                });
+                            })
+                            .catch((error) => {
+                                console.error("Error in reading" + error);
+                            });
+                        } else {
+                            window.alert("No user.");
+                        }
+                    });
                 }
 
                 </script>
