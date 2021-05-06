@@ -104,6 +104,15 @@ a.float:hover + div.label-container{
 	border-radius: 5px;
 	position: relative;
 }
+.popup-notif{
+	height: 400px;
+	width: 500px;
+	top:100px;
+	background: #fff;
+	padding: 20px;
+	border-radius: 5px;
+	position: relative;
+}
 input{
 	margin: 20px auto;
 	display: block;
@@ -127,3 +136,44 @@ input{
 .btn-exit:hover{
     color: rgb(255, 255, 255);
 }
+* {
+  box-sizing: border-box;
+}
+
+/* Style the list (remove margins and bullets, etc) */
+ul {
+  	list-style-type: none;
+  	padding: 0;
+  	margin: 0;
+}
+
+/* Style the list items */
+.msgItem{
+	border: 1px solid #ddd;
+	margin-top: -1px; /* Prevent double borders */
+	background-color: #f6f6f6;
+	padding: 12px;
+	padding-right: 36px;
+	text-decoration: none;
+	font-size: 12px;
+	color: black;
+	display: block;
+	position: relative;
+}
+
+/* Add a light grey background color on hover */
+.msgItem:hover {
+  	background-color: #eee;
+}
+
+/* Style the close button (span) */
+.close {
+	cursor: pointer;
+	position: absolute;
+	top: 50%;
+	right: 0%;
+	padding: 5px 4px;
+	transform: translate(0%, -50%);
+}
+
+.close:hover {background: #bbb;}
