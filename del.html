@@ -31,6 +31,7 @@
                 var CursorLng;
                 var currentHouse;
                 var myMessages = [];
+                var myListings = [];
             </script>
 
 
@@ -39,9 +40,7 @@
                 <a href="#" class="float" onclick="triggerRegisterNewHousePopup()"> <i class="fa fa-home my-float"></i> </a>
 
                 <!-- div class="label-container"> <div class="label-text">Register New House</div> <i class="fa fa-play label-arrow"></i> </div -->
-
                 <a href="#" class="floaty" onclick="triggerFilterPopup()" id= "filterenter"> <i class="fa fa-gear my-float"></i> </a>
-
                 <a href="#" class="floatx" onclick="triggerNotificationsPopup()"> <i class="fa fa-bell my-float"></i> </a>
 
           <!--Start of Nav Bar-->
@@ -72,8 +71,19 @@
           </nav>
           <script>
           function triggerRegisterNewHousePopup(){
-              if(!placedmarker) return;
-              document.getElementById("registerhousepopup").style.display = "flex";
+              if(!placedmarker) {
+                  triggerListingPopup();
+              }
+              else{
+                  document.getElementById("registerhousepopup").style.display = "flex";
+              }
+          }
+          function triggerListingPopup(){
+              getListingFromDatabase();
+              document.getElementById("listingpopup").style.display = "none";
+          }
+          function closeListingPopup(){
+              document.getElementById("listingpopup").style.display = "none";
           }
           function closeRegisterNewHousePopup(){
               document.getElementById("registerhousepopup").style.display = "none";
@@ -84,16 +94,13 @@
           function closeFilterPopup(){
               document.getElementById("filterpopup").style.display = "none";
           }
-
-          async function triggerNotificationsPopup(){              
+          async function triggerNotificationsPopup(){
               await getNotificationsFromDatabase();
               document.getElementById("notif").style.display = "flex";
           }
-
           function closeNotifications(){
              document.getElementById("notif").style.display = "none";
           }
-
           function triggerHousePopup(house){
 
               document.getElementById("housepopup_name").innerHTML = "House Name: "+ house.name;
@@ -103,7 +110,7 @@
               document.getElementById("displayhouseinfopopup").style.display = "flex";
 
           }
-          function closeHousePopup(house){
+          function closeHousePopup(){
               document.getElementById("displayhouseinfopopup").style.display = "none";
           }
           function registerNewHouse(){
@@ -125,11 +132,21 @@
                   </a>
               </div>
           </div>
-
           <div class="popup" id="notif"><!--Notifications popup-->
             <div class="popup-notif">
                 <p class="lead">Notifications</p>
-                <ul class="msglisg" id ="notificationmessages">
+                <ul id ="notificationmessages">
+                </ul>
+                <br>
+                <a href="#" class="btn btn-exit" onclick="closeNotifications()">
+                   Exit
+                </a>
+            </div>
+          </div>
+          <div class="popup" id="listingpopup"><!--House listings popup-->
+            <div class="popup-notif">
+                <p class="lead">Notifications</p>
+                <ul id ="notificationmessages">
                 </ul>
                 <br>
                 <a href="#" class="btn btn-exit" onclick="closeNotifications()">
@@ -173,12 +190,10 @@
           </div>
           <!-- Firebase App (the core Firebase SDK) is always required and must be listed first -->
           <script src="https://www.gstatic.com/firebasejs/8.4.2/firebase-app.js"></script>
-
           <!-- Add Firebase products that you want to use -->
           <script src="https://www.gstatic.com/firebasejs/8.4.2/firebase-auth.js"></script>
           <script src="https://www.gstatic.com/firebasejs/8.4.2/firebase-firestore.js"></script>
           <script>
-
             var firebaseConfig = {
               apiKey: "AIzaSyD22caki0Faq_SvkK_hEb6Hzbo1xUzARSY",
               authDomain: "cse327-22a1f.firebaseapp.com",
@@ -188,7 +203,6 @@
               appId: "1:655530972906:web:fe3b9ddfeba0926b14a993",
               measurementId: "G-CFTDRQSXCD"
             };
-
             // Initialize Firebase
             firebase.initializeApp(firebaseConfig);
           </script>
@@ -310,6 +324,7 @@
                     firebase.auth().onAuthStateChanged(function(user) {
                         if (user) {
                             db.collection("Root/Notification/" + currentHouse.owner).add({'msg': user.email + " is interested in your house named " + currentHouse.name});
+                            closeHousePopup();
                         } else {
                             window.alert("No user.");
                         }
@@ -326,7 +341,6 @@
                     .then((querySnapshot) => {
                         querySnapshot.forEach((doc) => {
                             var house = doc.data();
-                            //console.log(house["Lat"], house["Lng"]);
                             var point = {
                                 'type': 'Feature',
                                 'geometry': {
@@ -391,7 +405,6 @@
                         }
                     });
                 }
-                var housesNoFilter;
                 function filterQuery(){
                     var minrent=document.getElementById("minrent").value;
                     var maxrent=document.getElementById("maxrent").value;
@@ -410,21 +423,16 @@
                         'type': 'FeatureCollection',
                         'features': []
                     };
-                    console.log(houseJSON);
                     houseJSON.features.forEach((feat, idx) =>{
                         var rent=Number(feat.properties.rent);
                         var rooms=Number(feat.properties.bedrooms);
-                        console.log("minrent, rent, maxrent: ", minrent, rent,maxrent);
-                        console.log("minrooms, rooms, maxrooms: ", minrooms, rooms,maxrooms);
                         if(minrent <=rent && rent <= maxrent && minrooms<= rooms && rooms <= maxrooms){
-                            console.log("satisfies ", rent);
                             filterJSON.features.push(feat);
                         }
                     });
                     map.getSource('houseJSON').setData(filterJSON);
                     closeFilterPopup();
                 }
-
                 async function getNotificationsFromDatabase(){
                     firebase.auth().onAuthStateChanged(function(user) {
                         if (user) {
@@ -439,6 +447,32 @@
                                 });
                                 myMessages.forEach((msg) => {
                                     document.getElementById("notificationmessages").innerHTML+= "<li class=\"msgItem\">"+msg+"</li>";
+                                });
+                            })
+                            .catch((error) => {
+                                console.error("Error in reading" + error);
+                            });
+                        } else {
+                            window.alert("No user.");
+                        }
+                    });
+                }
+                async function getListingFromDatabase(){
+                    firebase.auth().onAuthStateChanged(function(user) {
+                        if (user) {
+                            myListings = [];
+
+                            document.getElementById("listingpopup").innerHTML="";
+                            db.collection("Root/Users/"+user.email)
+                            .get()
+                            .then((querySnapshot) => {
+                                querySnapshot.forEach((doc, idx) => {
+                                    var p1=doc.data()["id"];
+                                    var p2=doc.data()["name"];
+                                    myListings.push({p1:p2});
+                                });
+                                myListings.forEach((listing) => {
+                                    //document.getElementById("listingpopup").innerHTML+= "<li class=\"listing\">"+listing+"</li>";
                                 });
                             })
                             .catch((error) => {
