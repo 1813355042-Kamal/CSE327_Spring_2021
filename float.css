@@ -103,6 +103,8 @@ a.float:hover + div.label-container{
 	padding: 20px;
 	border-radius: 5px;
 	position: relative;
+
+
 }
 .popup-notif{
 	height: 400px;
@@ -112,6 +114,10 @@ a.float:hover + div.label-container{
 	padding: 20px;
 	border-radius: 5px;
 	position: relative;
+	overflow-y:scroll;
+    z-index:10;
+
+	
 }
 input{
 	margin: 20px auto;
@@ -177,3 +183,7 @@ ul {
 }
 
 .close:hover {background: #bbb;}
+
+
+
+
