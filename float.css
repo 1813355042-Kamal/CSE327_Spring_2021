@@ -106,7 +106,7 @@ a.float:hover + div.label-container{
 }
 
 .popup-notif{
-	height: 450px;
+	height: 800px;
 	width: 500px;
 	top:100px;
 	background: #fff;
@@ -198,4 +198,7 @@ ul {
 	position: relative;
 	overflow-y:scroll;
     z-index:10;
+}
+.listing-item{
+	padding-left: 30px;
 }
