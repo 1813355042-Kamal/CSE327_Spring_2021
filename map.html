@@ -28,6 +28,7 @@
             var currentHouse;
             var myMessages = [];
             var myListings = [];
+            var listingDict = {};
         </script>
 		<div id="map"></div>
 		<a href="#" class="float" onclick="triggerRegisterNewHousePopup()">
@@ -70,7 +71,7 @@
             }
             function triggerListingPopup(){
                 getListingFromDatabase();
-                document.getElementById("listingpopup").style.display = "none";
+                document.getElementById("listingpopup").style.display = "flex";
             }
             function closeListingPopup(){
                 document.getElementById("listingpopup").style.display = "none";
@@ -142,20 +143,20 @@
 			<!--Notifications popup-->
 			<div class="popup-notif">
 				<p class="lead">Notifications</p>
-					<ul id ="notificationmessages"></ul>
-					<br>
-					<a href="#" class="btn btn-exit" onclick="closeNotifications()">
-                        Exit
-                    </a>
+				<ul id ="notificationmessages"></ul>
+				<br>
+				<a href="#" class="btn btn-exit" onclick="closeNotifications()">
+                    Exit
+                </a>
 			</div>
         </div>
 		<div class="popup" id="listingpopup">
 			<!--House listings popup-->
-			<div class="popup-notif">
-				<p class="lead">Notifications</p>
-				<ul id ="notificationmessages"></ul>
+            <div class="popup-notif">
+				<p class="lead">My Listings</p>
+				<ul id ="listingpopup_listings"></ul>
 				<br>
-				<a href="#" class="btn btn-exit" onclick="closeNotifications()">
+				<a href="#" class="btn btn-exit" onclick="closeListingPopup()">
                     Exit
                 </a>
 			</div>
@@ -390,7 +391,8 @@
                             //insert _housename and house doc.id.
                             //to delete notification (and listing), search through Root/HouseList/houses for "doc.id" named listing.
                             db.collection("Root").doc("Users").collection(user.email).add({
-                                id:doc.id
+                                id:doc.id,
+                                name: _housename
                             }).catch((error) => {
                                 console.error("Error writing document: ", error);
                             });
@@ -458,21 +460,30 @@
                     }
                 });
             }
-            async function getListingFromDatabase(){//incomplete
+            async function getListingFromDatabase(){//Deletion part is not supported because firestore takes time to delete it.
                 firebase.auth().onAuthStateChanged(function(user) {
                     if (user) {
                         myListings = [];
-                        document.getElementById("listingpopup").innerHTML="";
+                        listingDict= {};
+                        document.getElementById("listingpopup_listings").innerHTML="";
                         db.collection("Root/Users/"+user.email)
                         .get()
                         .then((querySnapshot) => {
+                            var cntr=0;
                             querySnapshot.forEach((doc, idx) => {
                                 var p1=doc.data()["id"];
                                 var p2=doc.data()["name"];
-                                myListings.push({p1:p2});
+                                myListings.push({"id":p1,
+                                                 "name":p2,
+                                                 "index":cntr});
+                                cntr++;
                             });
                             myListings.forEach((listing) => {
-                                //document.getElementById("listingpopup").innerHTML+= "<li class=\"listing\">"+listing+"</li>";
+                                var cur_id="listing_index" + listing.index;
+                                //console.log(cur_id, listing.id);
+                                //listingDict[cur_id]=listing.id;
+                                document.getElementById("listingpopup_listings").innerHTML+= "<li class=\"msgItem listing-item\" id=\"" + cur_id+"\">"+listing.name+"</li>";
+                                //console.log(listing);
                             });
                         })
                         .catch((error) => {

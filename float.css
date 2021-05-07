@@ -199,3 +199,6 @@ ul {
 	overflow-y:scroll;
     z-index:10;
 }
+.listing-item{
+	padding-left: 30px;
+}
