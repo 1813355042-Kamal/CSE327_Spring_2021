@@ -56,10 +56,13 @@
                         <a href="map.html" class="nav-link">Map</a>
                     </li>
                     <li class="nav-item">
-                        <a href="#" class="nav-link">About Us</a>
+                        <a href="#" class="nav-link">Services</a>
                     </li>
                     <li class="nav-item">
-                        <a href="index.html" class="nav-link" onclick="logout()">Log Out</a>
+                        <a href="#" class="nav-link">Contact</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#" class="nav-link">About Us</a>
                     </li>
 
                 </ul>
@@ -104,8 +107,24 @@
               document.getElementById("housepopup_rent").innerHTML = "Rent: "+house.rent;
               document.getElementById("housepopup_bedrooms").innerHTML = "Bedrooms: "+house.bedrooms;
               document.getElementById("housepopup_bathrooms").innerHTML = "Bathrooms: "+house.bathrooms;
-              document.getElementById("displayhouseinfopopup").style.display = "flex";
+              document.getElementById("disphouseid").style.height = "350px";
 
+              var imglink = house.imglink;
+              console.log(imglink);
+              if (imglink!=null && imglink != "undefined" && imglink != ""){
+                  console.log("img link = ",house.imglink);
+                  document.getElementById("disphouseid").style.width = "800px";
+                  document.getElementById("housepopup_image").innerHTML="";
+                  document.getElementById("housepopup_image").innerHTML="<img src=\""+imglink+"\" class=\"housepopup_image_id\"></img>";
+                  document.getElementById("disphouseid").style.height = "850px";
+                  document.getElementById("housepopup_image").style.display="flex";
+              }
+              else{
+                  document.getElementById("disphouseid").style.width = "500px";
+                  document.getElementById("housepopup_image").innerHTML="";
+                  document.getElementById("housepopup_image").style.display="none";
+              }
+              document.getElementById("displayhouseinfopopup").style.display = "flex";
           }
           function closeHousePopup(){
               document.getElementById("displayhouseinfopopup").style.display = "none";
@@ -121,6 +140,7 @@
                   <input type="text" placeholder= "Rent" id="rent"></input>
                   <input type="text" placeholder= "Number of Bedrooms" id="bedrooms"></input>
                   <input type="text" placeholder= "Number of Bathrooms" id="bathrooms"></input>
+                  <input type="text" placeholder= "Image Link" id="imglink"></input>
                   <a href="#" class="btn btn-register" onclick="registerNewHouse()">
                      Register
                   </a>
@@ -149,19 +169,18 @@
                 <a href="#" class="btn btn-exit" onclick="closeNotifications()">
                    Exit
                 </a>
-
-                
-                
-
             </div>
           </div>
           <div class="popup" id="displayhouseinfopopup">
-              <div class="popup-content">
+              <div class="popup-content-disphouse" id="disphouseid">
                   <p class="lead" id= "housepopup_name">Sample House Name</p>
                   <p class="lead" id= "housepopup_rent">Rent: 69</p>
                   <p class="lead" id= "housepopup_bedrooms">Bedrooms: 4</p>
                   <p class="lead" id= "housepopup_bathrooms">Bathrooms: 20</p>
-                  <br><br><br><br><br><br>
+                  <div id="housepopup_image">
+                  </div>
+                  <!--img src="images/tiya-23.jpg" class="housepopup_image_id"></img-->
+                  <br><br><br>
 
                   <a href="#" class="btn btn-register" onclick="clickInterested()">
                      Interested
@@ -180,7 +199,7 @@
 
                   <input type="text" placeholder= "Min Rooms" id="minrooms"></input>
                   <input type="text" placeholder= "Max Rooms" id="maxrooms"></input>
-
+                  <br><br><br>
                   <a href="#" class="btn btn-register" onclick="filterQuery()">
                      Ok
                   </a>
@@ -189,8 +208,6 @@
                   </a>
               </div>
           </div>
-
-
           <!-- Firebase App (the core Firebase SDK) is always required and must be listed first -->
           <script src="https://www.gstatic.com/firebasejs/8.4.2/firebase-app.js"></script>
           <!-- Add Firebase products that you want to use -->
@@ -356,7 +373,8 @@
                                     'rent': house["rent"],
                                     'bedrooms': house["bedrooms"],
                                     'bathrooms': house["bathrooms"],
-                                    'owner': house["owner"]
+                                    'owner': house["owner"],
+                                    'imglink' : house["imglink"]
                                 }
                             };
                             houseJSON.features.push(point);
@@ -374,6 +392,7 @@
                     var _rent = document.getElementById("rent").value;
                     var _bedrooms = document.getElementById("bedrooms").value;
                     var _bathrooms = document.getElementById("bathrooms").value;
+                    var _imagelink = document.getElementById("imglink").value;
 
                     if(_housename == "" || rent=="" || bedrooms == "" || bathrooms == "") return;
 
@@ -386,7 +405,8 @@
                                 bathrooms: Number(_bedrooms),
                                 Lat: CursorLat,
                                 Lng: CursorLng,
-                                owner: user.email
+                                owner: user.email,
+                                imglink: _imagelink
                             })
                             .then((doc) => {
                                 //For notifications, access "Root/notifs/user.email"
@@ -460,7 +480,7 @@
                         }
                     });
                 }
-                async function getListingFromDatabase(){
+                async function getListingFromDatabase(){//incomplete
                     firebase.auth().onAuthStateChanged(function(user) {
                         if (user) {
                             myListings = [];
@@ -486,11 +506,7 @@
                         }
                     });
                 }
-
                 </script>
-                
-
-
   </body>
 
 </html>
