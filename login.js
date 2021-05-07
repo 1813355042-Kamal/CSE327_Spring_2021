@@ -2,16 +2,11 @@
 function persistentlogin(){
     firebase.auth().setPersistence(firebase.auth.Auth.Persistence.SESSION)
     .then(() => {
-        // Existing and future Auth states are now persisted in the current
-        // session only. Closing the window would clear any existing state even
-        // if a user forgets to sign out.
-        // ...
-        // New sign-in will be persisted with session persistence.
-
         var userEmail = document.getElementById("email_field").value;
         var userPass = document.getElementById("password_field").value;
 
         return firebase.auth().signInWithEmailAndPassword(userEmail, userPass).then(function(usr_){
+
             window.location.href = 'map.html';
         }).catch(function(error){
             var errorCode = error.code;
@@ -24,6 +19,7 @@ function persistentlogin(){
         window.alert("Unexpected error in persistent login");
     });
 }
+
 function login(){
 
   var userEmail = document.getElementById("email_field").value;
@@ -49,5 +45,26 @@ function login(){
 }
 
 function logout(){
-  firebase.auth().signOut();
+    console.log("Fk");
+    window.location.href = 'index.html';
+    firebase.auth().signOut();
+}
+
+function chklogin(){
+
+    firebase.auth().onAuthStateChanged(function(user) {
+        if (user) {
+            var elems = document.getElementsByClassName("btnDisappearAfterLogin");
+            var i=0;
+            for(i=0;i<elems.length;i++){
+                elems[i].style.visibility="hidden";
+            }
+        } else {
+            var elems = document.getElementsByClassName("btnDisappearAfterLogin");
+            var i=0;
+            for(i=0;i<elems.length;i++){
+                elems[i].style.visibility="visible";
+            }
+        }
+    });
 }
