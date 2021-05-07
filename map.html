@@ -56,15 +56,8 @@
                         <a href="map.html" class="nav-link">Map</a>
                     </li>
                     <li class="nav-item">
-                        <a href="#" class="nav-link">Services</a>
+                        <a href="#" class="nav-link" onclick="logout()">Log Out</a>
                     </li>
-                    <li class="nav-item">
-                        <a href="#" class="nav-link">Contact</a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="#" class="nav-link">About Us</a>
-                    </li>
-
                 </ul>
             </div>
           </div>
@@ -96,7 +89,6 @@
           }
           async function triggerNotificationsPopup(){
               await getNotificationsFromDatabase();
-              document.getElementById("notif").style.display = "flex";
           }
           function closeNotifications(){
              document.getElementById("notif").style.display = "none";
@@ -116,7 +108,7 @@
                   document.getElementById("disphouseid").style.width = "800px";
                   document.getElementById("housepopup_image").innerHTML="";
                   document.getElementById("housepopup_image").innerHTML="<img src=\""+imglink+"\" class=\"housepopup_image_id\"></img>";
-                  document.getElementById("disphouseid").style.height = "850px";
+                  document.getElementById("disphouseid").style.height = "800px";
                   document.getElementById("housepopup_image").style.display="flex";
               }
               else{
@@ -471,6 +463,7 @@
                                 myMessages.forEach((msg) => {
                                     document.getElementById("notificationmessages").innerHTML+= "<li class=\"msgItem\">"+msg+"</li>";
                                 });
+                                document.getElementById("notif").style.display = "flex";
                             })
                             .catch((error) => {
                                 console.error("Error in reading" + error);
@@ -484,7 +477,6 @@
                     firebase.auth().onAuthStateChanged(function(user) {
                         if (user) {
                             myListings = [];
-
                             document.getElementById("listingpopup").innerHTML="";
                             db.collection("Root/Users/"+user.email)
                             .get()
@@ -507,6 +499,7 @@
                     });
                 }
                 </script>
+                <script src="login.js"></script>
   </body>
 
 </html>
