@@ -96,18 +96,17 @@ a.float:hover + div.label-container{
 }
 
 .popup-content{
-	height: 400px;
+	height: 450px;
 	width: 500px;
 	top:100px;
 	background: #fff;
 	padding: 20px;
 	border-radius: 5px;
 	position: relative;
-
-
 }
+
 .popup-notif{
-	height: 400px;
+	height: 450px;
 	width: 500px;
 	top:100px;
 	background: #fff;
@@ -116,8 +115,6 @@ a.float:hover + div.label-container{
 	position: relative;
 	overflow-y:scroll;
     z-index:10;
-
-	
 }
 input{
 	margin: 20px auto;
@@ -183,7 +180,22 @@ ul {
 }
 
 .close:hover {background: #bbb;}
-
-
-
-
+.housepopup_image_id{
+	width:600px;
+	border-radius: 5px;
+	display: block;
+    margin-left: auto;
+    margin-right: auto;
+	padding-left: 24px;
+}
+.popup-content-disphouse{
+	height: 800px;
+	width: 800px;
+	top:100px;
+	background: #fff;
+	padding: 20px;
+	border-radius: 5px;
+	position: relative;
+	overflow-y:scroll;
+    z-index:10;
+}
