@@ -4,61 +4,34 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
     <title>Document</title>
-    <link rel="stylesheet" type="text/css" href="display house info.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" type="text/css" href="display-house.info.css">
 </head>
 <body>
-    <div class="center">
-        /*<input type="checkbox" id="show">*/
-        <label for="show "class="show-btn">click interest</label>
-        <div class="container">
-            <label for="show" class="close-btn fa fa close"></label>
-           
-            <div class="text"> display house info</div>
-           <form action="#">
-              <div class="data">
-                  <label>house no</label>
-                  <input type="text">
 
-              </div>
-              <div class="data">
-                <label>road no</label>
-                <input type="text" required>
-
-            </div>
-            <div class="data">
-                <label>location </label>
-                <input type="text" required>
-
-            </div>
-            <div class="data">
-                <label>floor no </label>
-                <input type="text" required>
-
-
-            </div>
-            <div class="data">
-                <label>flat size </label>
-                <input type="text" required>
-
-
-            </div>
-            <div class="btn">
-                <div class="inner">
-                    <button type="submit">Exit</button>
-
-                </div>
-            </div>
-           </form>
-          
-          
-            
-
+    <div class="container">
+        <a href="#" class="button"  id="button">click interest</a>
+    </div>
+    <div class="popup">
+        <div class="popup-content">
+            <img src="close.png" alt="close" class="close">
+            <h1  >display house info</h1>
+            <input type="text" placeholder="house no">
+            <input type="text" placeholder="road no">
+            <input type="text" placeholder=" location">
+            <input type="text" placeholder="floar num">
+            <input type="text" placeholder="flat size">
         </div>
 
     </div>
-
+    <script>
+        document.getElementById("button").addEventListener("click",function(){
+            document.querySelector(".popup").style.display="flex";
+        })
+        document.querySelector(".close").addEventListener("click",function(){
+            document.querySelector(".popup").style.display="none";
+        })
+    </script>
+    
 </body>
 </html>

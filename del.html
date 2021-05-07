@@ -11,6 +11,7 @@
     <link rel="stylesheet" href="main.css">
     <link rel="stylesheet" href="float.css">
 
+
     <script src="https://kit.fontawesome.com/7bf1794c28.js" crossorigin="anonymous"></script>
     <link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet">
     <!-- Mapbox Scripts-->
@@ -29,23 +30,23 @@
                 var CursorLat;
                 var CursorLng;
                 var currentHouse;
+                var myMessages = [];
+                var myListings = [];
             </script>
+
 
                 <div id="map"></div>
                 <div id="clickmarker"></div>
                 <a href="#" class="float" onclick="triggerRegisterNewHousePopup()"> <i class="fa fa-home my-float"></i> </a>
 
                 <!-- div class="label-container"> <div class="label-text">Register New House</div> <i class="fa fa-play label-arrow"></i> </div -->
-
                 <a href="#" class="floaty" onclick="triggerFilterPopup()" id= "filterenter"> <i class="fa fa-gear my-float"></i> </a>
-
                 <a href="#" class="floatx" onclick="triggerNotificationsPopup()"> <i class="fa fa-bell my-float"></i> </a>
 
           <!--Start of Nav Bar-->
           <nav class="navbar navbar-expand-sm navbar-dark bg-black">
           <div class="container">
               <a href="index.html" class="navbar-brand">BharaTiya</a>
-
             <div class="collapse navbar-collapse "id="navbarCollapse">
                 <ul class="navbar-nav ml-auto">
                     <li class="nav-item">
@@ -70,8 +71,19 @@
           </nav>
           <script>
           function triggerRegisterNewHousePopup(){
-              if(!placedmarker) return;
-              document.getElementById("registerhousepopup").style.display = "flex";
+              if(!placedmarker) {
+                  triggerListingPopup();
+              }
+              else{
+                  document.getElementById("registerhousepopup").style.display = "flex";
+              }
+          }
+          function triggerListingPopup(){
+              getListingFromDatabase();
+              document.getElementById("listingpopup").style.display = "none";
+          }
+          function closeListingPopup(){
+              document.getElementById("listingpopup").style.display = "none";
           }
           function closeRegisterNewHousePopup(){
               document.getElementById("registerhousepopup").style.display = "none";
@@ -82,25 +94,39 @@
           function closeFilterPopup(){
               document.getElementById("filterpopup").style.display = "none";
           }
-
-          function triggerNotificationsPopup(){
+          async function triggerNotificationsPopup(){
+              await getNotificationsFromDatabase();
               document.getElementById("notif").style.display = "flex";
           }
-
           function closeNotifications(){
              document.getElementById("notif").style.display = "none";
           }
-
           function triggerHousePopup(house){
 
               document.getElementById("housepopup_name").innerHTML = "House Name: "+ house.name;
               document.getElementById("housepopup_rent").innerHTML = "Rent: "+house.rent;
               document.getElementById("housepopup_bedrooms").innerHTML = "Bedrooms: "+house.bedrooms;
               document.getElementById("housepopup_bathrooms").innerHTML = "Bathrooms: "+house.bathrooms;
-              document.getElementById("displayhouseinfopopup").style.display = "flex";
+              document.getElementById("disphouseid").style.height = "350px";
 
+              var imglink = house.imglink;
+              console.log(imglink);
+              if (imglink!=null && imglink != "undefined" && imglink != ""){
+                  console.log("img link = ",house.imglink);
+                  document.getElementById("disphouseid").style.width = "800px";
+                  document.getElementById("housepopup_image").innerHTML="";
+                  document.getElementById("housepopup_image").innerHTML="<img src=\""+imglink+"\" class=\"housepopup_image_id\"></img>";
+                  document.getElementById("disphouseid").style.height = "850px";
+                  document.getElementById("housepopup_image").style.display="flex";
+              }
+              else{
+                  document.getElementById("disphouseid").style.width = "500px";
+                  document.getElementById("housepopup_image").innerHTML="";
+                  document.getElementById("housepopup_image").style.display="none";
+              }
+              document.getElementById("displayhouseinfopopup").style.display = "flex";
           }
-          function closeHousePopup(house){
+          function closeHousePopup(){
               document.getElementById("displayhouseinfopopup").style.display = "none";
           }
           function registerNewHouse(){
@@ -114,6 +140,7 @@
                   <input type="text" placeholder= "Rent" id="rent"></input>
                   <input type="text" placeholder= "Number of Bedrooms" id="bedrooms"></input>
                   <input type="text" placeholder= "Number of Bathrooms" id="bathrooms"></input>
+                  <input type="text" placeholder= "Image Link" id="imglink"></input>
                   <a href="#" class="btn btn-register" onclick="registerNewHouse()">
                      Register
                   </a>
@@ -123,20 +150,37 @@
               </div>
           </div>
           <div class="popup" id="notif"><!--Notifications popup-->
-            <div class="popup-content">
+            <div class="popup-notif">
                 <p class="lead">Notifications</p>
+                <ul id ="notificationmessages">
+                </ul>
+                <br>
+                <a href="#" class="btn btn-exit" onclick="closeNotifications()">
+                   Exit
+                </a>
+            </div>
+          </div>
+          <div class="popup" id="listingpopup"><!--House listings popup-->
+            <div class="popup-notif">
+                <p class="lead">Notifications</p>
+                <ul id ="notificationmessages">
+                </ul>
+                <br>
                 <a href="#" class="btn btn-exit" onclick="closeNotifications()">
                    Exit
                 </a>
             </div>
           </div>
           <div class="popup" id="displayhouseinfopopup">
-              <div class="popup-content">
+              <div class="popup-content-disphouse" id="disphouseid">
                   <p class="lead" id= "housepopup_name">Sample House Name</p>
                   <p class="lead" id= "housepopup_rent">Rent: 69</p>
                   <p class="lead" id= "housepopup_bedrooms">Bedrooms: 4</p>
                   <p class="lead" id= "housepopup_bathrooms">Bathrooms: 20</p>
-                  <br><br><br><br><br><br>
+                  <div id="housepopup_image">
+                  </div>
+                  <!--img src="images/tiya-23.jpg" class="housepopup_image_id"></img-->
+                  <br><br><br>
 
                   <a href="#" class="btn btn-register" onclick="clickInterested()">
                      Interested
@@ -155,7 +199,7 @@
 
                   <input type="text" placeholder= "Min Rooms" id="minrooms"></input>
                   <input type="text" placeholder= "Max Rooms" id="maxrooms"></input>
-
+                  <br><br><br>
                   <a href="#" class="btn btn-register" onclick="filterQuery()">
                      Ok
                   </a>
@@ -166,12 +210,10 @@
           </div>
           <!-- Firebase App (the core Firebase SDK) is always required and must be listed first -->
           <script src="https://www.gstatic.com/firebasejs/8.4.2/firebase-app.js"></script>
-
           <!-- Add Firebase products that you want to use -->
           <script src="https://www.gstatic.com/firebasejs/8.4.2/firebase-auth.js"></script>
           <script src="https://www.gstatic.com/firebasejs/8.4.2/firebase-firestore.js"></script>
           <script>
-
             var firebaseConfig = {
               apiKey: "AIzaSyD22caki0Faq_SvkK_hEb6Hzbo1xUzARSY",
               authDomain: "cse327-22a1f.firebaseapp.com",
@@ -181,7 +223,6 @@
               appId: "1:655530972906:web:fe3b9ddfeba0926b14a993",
               measurementId: "G-CFTDRQSXCD"
             };
-
             // Initialize Firebase
             firebase.initializeApp(firebaseConfig);
           </script>
@@ -303,6 +344,7 @@
                     firebase.auth().onAuthStateChanged(function(user) {
                         if (user) {
                             db.collection("Root/Notification/" + currentHouse.owner).add({'msg': user.email + " is interested in your house named " + currentHouse.name});
+                            closeHousePopup();
                         } else {
                             window.alert("No user.");
                         }
@@ -319,7 +361,6 @@
                     .then((querySnapshot) => {
                         querySnapshot.forEach((doc) => {
                             var house = doc.data();
-                            //console.log(house["Lat"], house["Lng"]);
                             var point = {
                                 'type': 'Feature',
                                 'geometry': {
@@ -332,7 +373,8 @@
                                     'rent': house["rent"],
                                     'bedrooms': house["bedrooms"],
                                     'bathrooms': house["bathrooms"],
-                                    'owner': house["owner"]
+                                    'owner': house["owner"],
+                                    'imglink' : house["imglink"]
                                 }
                             };
                             houseJSON.features.push(point);
@@ -350,6 +392,7 @@
                     var _rent = document.getElementById("rent").value;
                     var _bedrooms = document.getElementById("bedrooms").value;
                     var _bathrooms = document.getElementById("bathrooms").value;
+                    var _imagelink = document.getElementById("imglink").value;
 
                     if(_housename == "" || rent=="" || bedrooms == "" || bathrooms == "") return;
 
@@ -362,7 +405,8 @@
                                 bathrooms: Number(_bedrooms),
                                 Lat: CursorLat,
                                 Lng: CursorLng,
-                                owner: user.email
+                                owner: user.email,
+                                imglink: _imagelink
                             })
                             .then((doc) => {
                                 //For notifications, access "Root/notifs/user.email"
@@ -384,7 +428,6 @@
                         }
                     });
                 }
-                var housesNoFilter;
                 function filterQuery(){
                     var minrent=document.getElementById("minrent").value;
                     var maxrent=document.getElementById("maxrent").value;
@@ -403,19 +446,65 @@
                         'type': 'FeatureCollection',
                         'features': []
                     };
-                    console.log(houseJSON);
                     houseJSON.features.forEach((feat, idx) =>{
                         var rent=Number(feat.properties.rent);
                         var rooms=Number(feat.properties.bedrooms);
-                        console.log("minrent, rent, maxrent: ", minrent, rent,maxrent);
-                        console.log("minrooms, rooms, maxrooms: ", minrooms, rooms,maxrooms);
                         if(minrent <=rent && rent <= maxrent && minrooms<= rooms && rooms <= maxrooms){
-                            console.log("satisfies ", rent);
                             filterJSON.features.push(feat);
                         }
                     });
                     map.getSource('houseJSON').setData(filterJSON);
                     closeFilterPopup();
+                }
+                async function getNotificationsFromDatabase(){
+                    firebase.auth().onAuthStateChanged(function(user) {
+                        if (user) {
+                            myMessages=[];
+                            document.getElementById("notificationmessages").innerHTML="";
+                            db.collection("Root/Notification/"+user.email)
+                            .get()
+                            .then((querySnapshot) => {
+                                querySnapshot.forEach((doc, idx) => {
+                                    console.log(doc.id);
+                                    myMessages.push(doc.data()["msg"]);
+                                });
+                                myMessages.forEach((msg) => {
+                                    document.getElementById("notificationmessages").innerHTML+= "<li class=\"msgItem\">"+msg+"</li>";
+                                });
+                            })
+                            .catch((error) => {
+                                console.error("Error in reading" + error);
+                            });
+                        } else {
+                            window.alert("No user.");
+                        }
+                    });
+                }
+                async function getListingFromDatabase(){//incomplete
+                    firebase.auth().onAuthStateChanged(function(user) {
+                        if (user) {
+                            myListings = [];
+
+                            document.getElementById("listingpopup").innerHTML="";
+                            db.collection("Root/Users/"+user.email)
+                            .get()
+                            .then((querySnapshot) => {
+                                querySnapshot.forEach((doc, idx) => {
+                                    var p1=doc.data()["id"];
+                                    var p2=doc.data()["name"];
+                                    myListings.push({p1:p2});
+                                });
+                                myListings.forEach((listing) => {
+                                    //document.getElementById("listingpopup").innerHTML+= "<li class=\"listing\">"+listing+"</li>";
+                                });
+                            })
+                            .catch((error) => {
+                                console.error("Error in reading" + error);
+                            });
+                        } else {
+                            window.alert("No user.");
+                        }
+                    });
                 }
 
                 </script>

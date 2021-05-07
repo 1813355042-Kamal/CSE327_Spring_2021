@@ -96,13 +96,25 @@ a.float:hover + div.label-container{
 }
 
 .popup-content{
-	height: 400px;
+	height: 450px;
 	width: 500px;
 	top:100px;
 	background: #fff;
 	padding: 20px;
 	border-radius: 5px;
 	position: relative;
+}
+
+.popup-notif{
+	height: 450px;
+	width: 500px;
+	top:100px;
+	background: #fff;
+	padding: 20px;
+	border-radius: 5px;
+	position: relative;
+	overflow-y:scroll;
+    z-index:10;
 }
 input{
 	margin: 20px auto;
@@ -126,4 +138,64 @@ input{
 }
 .btn-exit:hover{
     color: rgb(255, 255, 255);
+}
+* {
+  box-sizing: border-box;
+}
+
+/* Style the list (remove margins and bullets, etc) */
+ul {
+  	list-style-type: none;
+  	padding: 0;
+  	margin: 0;
+}
+
+/* Style the list items */
+.msgItem{
+	border: 1px solid #ddd;
+	margin-top: -1px; /* Prevent double borders */
+	background-color: #f6f6f6;
+	padding: 12px;
+	padding-right: 36px;
+	text-decoration: none;
+	font-size: 12px;
+	color: black;
+	display: block;
+	position: relative;
+}
+
+/* Add a light grey background color on hover */
+.msgItem:hover {
+  	background-color: #eee;
+}
+
+/* Style the close button (span) */
+.close {
+	cursor: pointer;
+	position: absolute;
+	top: 50%;
+	right: 0%;
+	padding: 5px 4px;
+	transform: translate(0%, -50%);
+}
+
+.close:hover {background: #bbb;}
+.housepopup_image_id{
+	width:600px;
+	border-radius: 5px;
+	display: block;
+    margin-left: auto;
+    margin-right: auto;
+	padding-left: 24px;
+}
+.popup-content-disphouse{
+	height: 800px;
+	width: 800px;
+	top:100px;
+	background: #fff;
+	padding: 20px;
+	border-radius: 5px;
+	position: relative;
+	overflow-y:scroll;
+    z-index:10;
 }
