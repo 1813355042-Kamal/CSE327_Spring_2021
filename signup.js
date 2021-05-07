@@ -1,30 +1,39 @@
-<script>
-  // Your web app's Firebase configuration
-  // For Firebase JS SDK v7.20.0 and later, measurementId is optional
-  var firebaseConfig = {
-    apiKey: "AIzaSyCaJC-qcxd_8cJYJqkPbTuv2S0tY0r09IU",
-    authDomain: "cse327-cf8b5.firebaseapp.com",
-    projectId: "cse327-cf8b5",
-    storageBucket: "cse327-cf8b5.appspot.com",
-    messagingSenderId: "1029376971824",
-    appId: "1:1029376971824:web:b070bf1f6ab3237012c9f5",
-    measurementId: "G-RGNSVZ35BV"
-  };
-  // Initialize Firebase
-  firebase.initializeApp(firebaseConfig);
+const firebaseConfig = {
+  apiKey: "AIzaSyD22caki0Faq_SvkK_hEb6Hzbo1xUzARSY",
+  authDomain: "cse327-22a1f.firebaseapp.com",
+  projectId: "cse327-22a1f",
+  storageBucket: "cse327-22a1f.appspot.com",
+  messagingSenderId: "655530972906",
+  appId: "1:655530972906:web:1aaa3af6ab53c85b14a993",
+  measurementId: "G-9MVFM433J4"
+};
 
-  const auth = firebase.auth();
+  firebase.initializeApp(firebaseConfig);
   firebase.analytics();
 
+  document.getElementById("sign-up-form").addEventListener("submit", function(event){
+    event.preventDefault()
+  });
+
+const auth = firebase.auth();
   function LoginData(){
-      var firstname = document.getElementById("firstname");
-      var lastname = document.getElementById("lastname");
-      var email = document.getElementById("email");
-      var phonenumber = document.getElementById("phonenumber");
-      var password = document.getElementById("password");
-      var address = document.getElementById("address");
-      const promise = auth.createUserWithInfo(email.value, password.value);
-      promise.catch(e => alert (e.message));
-      alert("Signed Up");
+    
+      var firstname = document.getElementById("firstname").value;
+      var lastname = document.getElementById("lastname").value;
+      var email = document.getElementById("email").value;
+      var phonenumber = document.getElementById("phonenumber").value;
+      var password = document.getElementById("password").value;
+      var address = document.getElementById("address").value;
+
+
+      auth.createUserWithEmailAndPassword(email, password).catch((error) => {
+        console.log("error: ")
+        console.log(error)
+        var errorCode = error.code;
+        var errorMessage = error.message;
+        // ..
+      });
+
+      alert("Form Submited");
+    
   }
-</script>
