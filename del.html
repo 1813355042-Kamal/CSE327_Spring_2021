@@ -23,13 +23,13 @@
 		<a href="#" class="float" onclick="triggerRegisterNewHousePopup()"> <i class="fa fa-home my-float"></i> </a>
 		<a href="#" class="floaty" onclick="triggerFilterPopup()" id= "filterenter"> <i class="fa fa-sliders my-float"></i> </a>
 		<a href="#" class="floatx" onclick="triggerNotificationsPopup()"> <i class="fa fa-bell my-float"></i> </a>
-        <a href="#" class="floatz" onclick="triggerPlotPopup()"> <i class="fa fa-gear my-float"></i> </a>
+        <!--a href="#" class="floatz" onclick="triggerPlotPopup()"> <i class="fa fa-gear my-float"></i> </a-->
 		<nav class="navbar navbar-expand-sm navbar-dark bg-black">
 			<div class="container">
 				<a href="index.html" class="navbar-brand"> BharaTiya </a>
 				<div class="collapse navbar-collapse "id="navbarCollapse">
 					<ul class="navbar-nav ml-auto">
-						<li class="nav-item"> <a href="index.html" class="nav-link">Home</a> </li>
+						<li class="nav-item"> <a href="index.html" class="nav-link"> Home</a> </li>
 						<li class="nav-item active"> <a href="map.html" class="nav-link"> Map </a></li>
 						<li class="nav-item"> <a href="#" class="nav-link" onclick="logout()"> Log Out </a></li>
 					</ul>
@@ -60,7 +60,7 @@
             <div class="popup-notif">
 				<p class="lead"> Notifications </p>
 				<ul id ="notificationmessages"></ul> <br>
-				<a href="#" class="btn btn-exit" onclick="closeNotifications()">Exit </a>
+				<a href="#" class="btn btn-exit" onclick="closeNotifications()"> Exit </a>
 			</div>
         </div>
 		<div class="popup" id="listingpopup">
@@ -72,7 +72,7 @@
 		</div>
         <div class="popup" id="plotpopup">
             <div class="popup-plot">
-				<p class="lead">Show On Map</p>
+				<p class="lead"> Show On Map </p>
                 <a href="#" class="btn btn-register" onclick="plotOnMap()"> Show </a>
 				<a href="#" class="btn btn-exit" onclick="closePlotPopup()"> Exit </a>
 			</div>
@@ -85,13 +85,13 @@
                 <p class="lead" id= "housepopup_bedrooms"></p>
                 <p class="lead" id= "housepopup_bathrooms"></p>
                 <div id="housepopup_image"></div><br><br><br>
-                <a href="#" class="btn btn-register" onclick="clickInterested()"> Interested </a>
+                <a href="#" class="btn btn-register" onclick="OnClickInterested()"> Interested </a>
                 <a href="#" class="btn btn-exit" onclick = "closeHousePopup()"> Exit </a>
             </div>
         </div>
         <div class="popup" id="filterpopup">
             <div class="popup-content">
-                <p class="lead">Filter Houses</p>
+                <p class="lead"> Filter Houses </p>
                 <input type="text" placeholder= "Min Rent" id="minrent"></input>
                 <input type="text" placeholder= "Max Rent" id="maxrent"></input>
                 <input type="text" placeholder= "Min Rooms" id="minrooms"></input>
