@@ -45,7 +45,6 @@
 
     //This function enables the user to log out of the website.
     function logOut() {
-        console.log("Fk");
         window.location.href = 'index.html';
         firebase.auth().signOut();
     }
