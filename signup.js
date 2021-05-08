@@ -16,14 +16,11 @@ const firebaseConfig = {
   });
 
 const auth = firebase.auth();
-  function LoginData(){
+  function loginData(){
     
-      var firstname = document.getElementById("firstname").value;
-      var lastname = document.getElementById("lastname").value;
+      
       var email = document.getElementById("email").value;
-      var phonenumber = document.getElementById("phonenumber").value;
       var password = document.getElementById("password").value;
-      var address = document.getElementById("address").value;
 
 
       auth.createUserWithEmailAndPassword(email, password).catch((error) => {
