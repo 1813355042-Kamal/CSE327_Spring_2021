@@ -34,3 +34,29 @@ function filterQuery(){
     refreshHouseDataSource();
     closeFilterPopup();
 }
+
+function plotOnMap(){
+    /* Sample feature from the `examples.8fgz4egr` tileset:
+    {
+        "type": "Feature",
+        "properties": {
+            "ethnicity": "White"
+        },
+        "geometry": {
+            "type": "Point",
+            "coordinates": [ -122.447303, 37.753574 ]
+        }
+    }
+    */
+    // map.addLayer({
+    //     id: 'newlayer',
+    //     type: 'circle',
+    //     source: 'houseJSON',
+    //     paint: {
+    //         'circle-radius': ['get','radius'],
+    //         'circle-color': '#F55'
+    //     },
+    //     filter: ['in', '$type', 'Point']
+    // });
+    closePlotPopup();
+}
