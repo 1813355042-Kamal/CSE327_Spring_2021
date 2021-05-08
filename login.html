@@ -1,78 +1,60 @@
 <!doctype html>
 <html lang="en">
-  <head>
-    <!-- Required meta tags -->
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <head>
+      <!-- Required meta tags -->
+      <meta charset = "utf-8">
+      <meta name = "viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+      <!-- Bootstrap CSS -->
+      <link rel = "stylesheet" href = "https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+      <link rel = "stylesheet" href = "login.css">
+      <title>Log in</title>
+    </head>
+    <body>
+      <!-- The core Firebase JS SDK is always required and must be listed first -->
+      <script src="https://www.gstatic.com/firebasejs/8.4.2/firebase-app.js"></script>
+      <script src="https://www.gstatic.com/firebasejs/8.4.2/firebase-auth.js"></script>
+      <div class="sign-up-form">
+        <div class="row justify-content-center h-100">
+          <h1>Log in</h1>
+          <div id="login_div">
+              <input type="email" class="input-box" placeholder="Your e-mail" id="email_field">
+              <input type="password" class="input-box" placeholder="Your password" id="password_field">
+              <button onclick="persistentLogin()" style="background-color: #d15e1b">Login</button>
+              <a href="signup.html"><p>Don't have an account? Click here!</p></a>
+          </div>
 
-    <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
-    <link rel="stylesheet" href="login.css">
-
-    <title>Log in</title>
-
-
-
-  </head>
-  <body>
-    <!-- The core Firebase JS SDK is always required and must be listed first -->
-    <script src="https://www.gstatic.com/firebasejs/8.4.2/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/8.4.2/firebase-auth.js"></script>
-
-    <div class="sign-up-form">
-      <div class="row justify-content-center h-100">
-
-        <h1>Log in</h1>
-
-        <div id="login_div">
-
-            <input type="email" class="input-box" placeholder="Your e-mail" id="email_field">
-            <input type="password" class="input-box" placeholder="Your password" id="password_field">
-            <button onclick="persistentlogin()" style="background-color: #d15e1b">Login</button>
-                <hr>
-                <a href="signup.html"><p>Don't have an account? Click here!</p></a>
-
-         </div>
+      <!-- Optional JavaScript -->
+      <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+      <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+      <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+      <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js" integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous"></script>
 
 
+      <!-- Insert these scripts at the bottom of the HTML, but before you use any Firebase services -->
 
-    <!-- Optional JavaScript -->
-    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js" integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous"></script>
+      <!-- Firebase App (the core Firebase SDK) is always required and must be listed first -->
+      <script src="https://www.gstatic.com/firebasejs/8.4.2/firebase-app.js"></script>
 
+      <!-- Add Firebase products that you want to use -->
+      <script src="https://www.gstatic.com/firebasejs/8.4.2/firebase-auth.js"></script>
+      <script src="https://www.gstatic.com/firebasejs/8.4.2/firebase-firestore.js"></script>
 
-<!-- Insert these scripts at the bottom of the HTML, but before you use any Firebase services -->
+      <script>
+      // TODO: Replace the following with your app's Firebase project configuration
+      // For Firebase JavaScript SDK v7.20.0 and later, `measurementId` is an optional field
+        var firebaseConfig = {
+          apiKey: "AIzaSyD22caki0Faq_SvkK_hEb6Hzbo1xUzARSY",
+          authDomain: "cse327-22a1f.firebaseapp.com",
+          projectId: "cse327-22a1f",
+          storageBucket: "cse327-22a1f.appspot.com",
+          messagingSenderId: "655530972906",
+          appId: "1:655530972906:web:fe3b9ddfeba0926b14a993",
+          measurementId: "G-CFTDRQSXCD"
+      };
+      // Initialize Firebase
+      firebase.initializeApp(firebaseConfig);
+      </script>
 
-  <!-- Firebase App (the core Firebase SDK) is always required and must be listed first -->
-  <script src="https://www.gstatic.com/firebasejs/8.4.2/firebase-app.js"></script>
-
-  <!-- Add Firebase products that you want to use -->
-  <script src="https://www.gstatic.com/firebasejs/8.4.2/firebase-auth.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/8.4.2/firebase-firestore.js"></script>
-
-  <script>
-    // TODO: Replace the following with your app's Firebase project configuration
-    // For Firebase JavaScript SDK v7.20.0 and later, `measurementId` is an optional field
-    var firebaseConfig = {
-      apiKey: "AIzaSyD22caki0Faq_SvkK_hEb6Hzbo1xUzARSY",
-      authDomain: "cse327-22a1f.firebaseapp.com",
-      projectId: "cse327-22a1f",
-      storageBucket: "cse327-22a1f.appspot.com",
-      messagingSenderId: "655530972906",
-      appId: "1:655530972906:web:fe3b9ddfeba0926b14a993",
-      measurementId: "G-CFTDRQSXCD"
-    };
-
-    // Initialize Firebase
-    firebase.initializeApp(firebaseConfig);
-  </script>
-
-
-
-
-<script src="login.js"></script>
-
-  </body>
+      <script src="login.js"></script>
+    </body>
 </html>
