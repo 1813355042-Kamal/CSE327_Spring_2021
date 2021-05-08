@@ -35,7 +35,11 @@ function OnClickMap(coord){
     }
     map.getSource('cursorCordinates').setData(cursorCordinates);
 }
-
+/**
+* this function will accept details click interested.
+*@param{string}
+*@returns{layout}
+*/
 function OnClickListener(coord){
     var features = map.queryRenderedFeatures(coord.point, {
         //Since we're interested in if we click on a house, we'll specify its layers, because the map may have different features on different layers.
