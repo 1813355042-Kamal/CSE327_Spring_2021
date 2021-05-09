@@ -1,18 +1,29 @@
-var placedmarker = false;
+// This handles if a cursor is currently placed on the map or not.
+var placedmarker = false;       
+
+// This holds a reference to the Cursor object, if placedmarker is true. Its latitude, longitude properties are accessed when a user adds a New House at that Cursor location.
 var Cursor;
+
+
 var CursorLat;
 var CursorLng;
+
+//This holds a reference to the current house the user is looking at, its properties area accessed when the user clicks on a house.
 var currentHouse;
+
 var myMessages = [];
 var myListings = [];
 var listingDict = {};
 var mapPlot = [];
-// cursorCordinates object to hold our measurement features
+
+
 var cursorCordinates = {
     'type': 'FeatureCollection',
     'features': []
 };
 
+
+//houseJSON contains the coordinates and the features (name, rent, owner) of all the houses being displayed on the map at a given instance.
 var houseJSON = {
     'type': 'FeatureCollection',
     'features': []
@@ -38,15 +49,21 @@ var firebaseConfig = {
 };
 
 firebase.initializeApp(firebaseConfig);
+
+// db holds the firestore database reference.
 var db = firebase.firestore();
 
 
+
+//This gets called when the Map Object loads.
 map.on('load', function(){
     OnMapLoad();
 });
 
+/**
+ * This function downloads the House Marker Icon and applies it on the houseJSON Source.
+ */
 function addStyles(){
-    //Download House Marker Icon and Apply on House Source.
     map.loadImage('https://docs.mapbox.com/mapbox-gl-js/assets/custom_marker.png', function (error, image) {
         if (error) throw error;
         map.addImage('custom-marker', image);
@@ -58,6 +75,9 @@ function refreshHouseDataSource(){
     map.getSource('houseJSON').setData(houseJSON);
 }
 
+/**
+ * This function adds the coordinate sources to the Map as a separate layer, and applies the house marker icon on the layer.
+ */
 function addHouseSource(){
     //add the Coordinate source for houses
     map.addSource('houseJSON', {
@@ -84,7 +104,9 @@ function addHouseSource(){
         filter: ['in', '$type', 'Point']
     });
 }
-
+/**
+ * This function adds the coordinate sources to the Mouse Cursor as a separate layer.
+ */
 function addCursorSource(){
     //add the Coordinate source for mouse cursor
     map.addSource('cursorCordinates', {
