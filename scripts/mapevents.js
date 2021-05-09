@@ -1,32 +1,17 @@
-/**
- * This Event is called once the map initializes.
- * It calls addCursorSource(), addHouseSource, addStyles()
- * and attaches ClickListeners, then fetches the database for the houses.
- */
 function OnMapLoad(){
-    
-    //We add the mouse cursor coordinate sources.
     addCursorSource();
-    
-    //We add the house coordinate source.
     addHouseSource();
-
-    //We add the styles(icon) to the house layer.
     addStyles();
 
-    //We the mouse click event
+    //Add mouseclick event
     map.on('click', function (coord) {
         OnClickListener(coord);
     });
-    
-    //Fetching data from the database.
+
+    //Populate houses list
     databaseFetch();
 }
 
-/**
- * This handles the Event when a map is clicked (handling cursor behavior).
- * @param {Point} coord - A Geometric point containing latLng fields indicating the where the user clicked
- */
 function OnClickMap(coord){
     if(placedmarker){ //Cursor already placed, remove it:
         cursorCordinates.features=[];
@@ -50,11 +35,11 @@ function OnClickMap(coord){
     }
     map.getSource('cursorCordinates').setData(cursorCordinates);
 }
-
 /**
- * This handles the Event when a House is clicked.
- * @param {Point} coord - A Geometric point containing latLng fields indicating the where the user clicked
- */
+* this function will accept details click interested.
+*@param{string}
+*@returns{layout}
+*/
 function OnClickListener(coord){
     var features = map.queryRenderedFeatures(coord.point, {
         //Since we're interested in if we click on a house, we'll specify its layers, because the map may have different features on different layers.
@@ -70,10 +55,7 @@ function OnClickListener(coord){
         triggerHousePopup(feature.properties);
     }
 }
-/**
- * This handles the Event when a House is clicked.
- * @param {Point} coord - A Geometric point containing latLng fields indicating the where the user clicked
- */
+
 function OnClickInterested(){
     firebase.auth().onAuthStateChanged(function(user) {
         if (user) {

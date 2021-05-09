@@ -1,11 +1,4 @@
 
-const MAX_INPUT_FIELD_VALUE = 2000000000;
-
-/**
- * This function will filter houses based on the inputs provided by the user in
- * the 'Filter Houses' form, and then update the map accordingly.
- * if invalid inputs are provided, they are set to the default min/max value accordingly.
- */
 function filterQuery(){
     var minrent=document.getElementById("minrent").value;
     var maxrent=document.getElementById("maxrent").value;
@@ -13,19 +6,18 @@ function filterQuery(){
     var maxrooms=document.getElementById("maxrooms").value;
     var minarea=document.getElementById("minarea").value;
     var maxarea=document.getElementById("maxarea").value;
-    
+    if(minrent=="" ) minrent = -1;
+    if(maxrent=="" ) maxrent = 10000000;
+    if(minrooms=="" ) minrooms = -1;
+    if(maxrooms=="" ) maxrooms = 10000000;
+    if(minarea=="") minarea= -1;
+    if(maxarea=="") maxarea= 10000000;
     minrent= Number(minrent);
     maxrent= Number(maxrent);
     minrooms=Number(minrooms);
     maxrooms=Number(maxrooms);
     minarea=Number(minarea);
     maxarea=Number(maxarea);
-
-    if(maxrent=="" || maxrent == NaN) maxrent = MAX_INPUT_FIELD_VALUE;
-    if(minrooms=="" || minrooms== NaN) minrooms = -1;
-    if(maxrooms=="" || maxrooms== NaN) maxrooms = MAX_INPUT_FIELD_VALUE;
-    if(minarea=="" || minarea== NaN) minarea= -1;
-    if(maxarea==""|| maxarea ==NaN) maxarea= MAX_INPUT_FIELD_VALUE;
 
     var filterJSON = {
         'type': 'FeatureCollection',
@@ -41,4 +33,30 @@ function filterQuery(){
     });
     refreshHouseDataSource();
     closeFilterPopup();
+}
+
+function plotOnMap(){
+    /* Sample feature from the `examples.8fgz4egr` tileset:
+    {
+        "type": "Feature",
+        "properties": {
+            "ethnicity": "White"
+        },
+        "geometry": {
+            "type": "Point",
+            "coordinates": [ -122.447303, 37.753574 ]
+        }
+    }
+    */
+    // map.addLayer({
+    //     id: 'newlayer',
+    //     type: 'circle',
+    //     source: 'houseJSON',
+    //     paint: {
+    //         'circle-radius': ['get','radius'],
+    //         'circle-color': '#F55'
+    //     },
+    //     filter: ['in', '$type', 'Point']
+    // });
+    closePlotPopup();
 }
