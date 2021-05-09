@@ -1,5 +1,10 @@
 let auth = null;
 
+/**
+ * This function registers a new user to the database.
+ * @param {string} email The email of the user.
+ * @param {string} password The password of the user.
+ */
 function loginDataActor(email, password, cb = () => {}){
     auth.createUserWithEmailAndPassword(email, password).then(() => {
         cb(true);
@@ -14,7 +19,7 @@ function loginDataActor(email, password, cb = () => {}){
     });
 }
 
-
+/** This function declares the variables and calls the loginDataActor function. */
 function loginData() {
     var email = document.getElementById("email").value;
     var password = document.getElementById("password").value;

@@ -1,5 +1,3 @@
-
-
 const {stubAuth, loginDataActor} = require('./signup.js');
 
 let calledWith = [];
