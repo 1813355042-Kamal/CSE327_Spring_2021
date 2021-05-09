@@ -17,18 +17,25 @@ document.getElementById("sign-up-form").addEventListener("submit", function(even
 
 const auth = firebase.auth();
 
-
-function loginData(){
-    var email = document.getElementById("email").value;
-    var password = document.getElementById("password").value;
-    auth.createUserWithEmailAndPassword(email, password).catch((error) => {
+function loginDataActor(email, password, cb = () => {}){
+    auth.createUserWithEmailAndPassword(email, password).then(() => {
+        cb(true);
+    }).catch((error) => {
+        cb(false, error);
         console.log("error: ")
         console.log(error)
         var errorCode = error.code;
         var errorMessage = error.message;
         // ..
+    }).finally(() => {
+        alert("Form Submited");
     });
+}
 
-    alert("Form Submited");
-    
+
+function loginData() {
+    var email = document.getElementById("email").value;
+    var password = document.getElementById("password").value;
+
+    loginDataActor(email, password);
 }

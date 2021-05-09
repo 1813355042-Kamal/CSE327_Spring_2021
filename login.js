@@ -21,30 +21,37 @@
     }
 
     /** This function enables the user to log in to his/her existing account on the database. */
-    function loginFunction() {
-
-        var userEmail = document.getElementById("email_field").value;
-        var userPass = document.getElementById("password_field").value;
-
-        firebase.auth().signInWithEmailAndPassword(userEmail, userPass).catch(function(error) {
-            // Handle Errors here.
-            var errorCode = error.code;
-            var errorMessage = error.message;
-            window.alert("Error : " + errorMessage);
-        });
-
+    function loginActor(userEmail, userPass, cb = () => {}) {
         firebase.auth().signInWithEmailAndPassword(userEmail, userPass).then(function(usr_){
             //This will log the user in to the website and redirect to the map.
             window.location.href = 'map.html';
+
+            cb(true);
+
         }).catch(function(error){
             var errorCode = error.code;
             var errorMessage = error.message;
             window.alert("Error : " + errorMessage);
+
+            cb(false);
+
         });
     }
 
+    function loginFunction() {
+        var userEmail = document.getElementById("email_field").value;
+        var userPass = document.getElementById("password_field").value;
+
+        loginActor(userEmail, userPass);
+    }
+
     /** This function enables the user to log out of the website. */
-    function logOut() {
+    function logOut(cb = () => {}) {
         window.location.href = 'index.html';
-        firebase.auth().signOut();
+
+        firebase.auth().signOut().then(() => {
+            cb(true);
+        }).catch((error) => {
+            cb(false, error);
+        });
     }
