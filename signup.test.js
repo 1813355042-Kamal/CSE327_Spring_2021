@@ -1,4 +1,4 @@
-const {stubAuth, loginDataActor} = require('./signup.js');
+const {stubAuth, loginDataActor} = require('./scripts/signup.js');
 
 let calledWith = [];
 
