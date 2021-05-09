@@ -1,6 +1,4 @@
-/**
- * Fetches house data from the database, and populates houseJSON with the coordinates and the house properties.
- */
+//Fetch House data from database.
 function databaseFetch(){
     houseJSON.features=[];
     db.collection("Root/HouseList/houses")
@@ -33,9 +31,7 @@ function databaseFetch(){
     });
 }
 
-/**
- * This function adds a house to the database where the user has his Cursor placed.
- */
+//This adds the newly registered house to the database.
 function addHouseinDB(){
     databaseFetch();
     var _housename = document.getElementById("housename").value;
@@ -82,9 +78,7 @@ function addHouseinDB(){
     });
 }
 
-/**
- * Retrieve Listings posted by the current user from the database.
- */
+//Retrieve my Listings from the database
 async function getListingFromDatabase(){
     firebase.auth().onAuthStateChanged(function(user) {
         if (user) {
@@ -117,9 +111,7 @@ async function getListingFromDatabase(){
     });
 }
 
-/**
- * Retrieve Notifications of the current user from the database.
- */
+//Retrieve notifications from database
 async function getNotificationsFromDatabase(){
     firebase.auth().onAuthStateChanged(function(user) {
         if (user) {
