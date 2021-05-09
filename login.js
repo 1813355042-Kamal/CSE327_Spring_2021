@@ -55,3 +55,8 @@
             cb(false, error);
         });
     }
+
+
+    if (module) {
+        module.exports = loginActor;
+    }
